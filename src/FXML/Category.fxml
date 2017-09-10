@@ -39,7 +39,7 @@
                   <Font size="17.0" />
                </font>
             </JFXButton>
-            <JFXTextField focusColor="#546e7a" layoutX="669.0" layoutY="59.0" prefHeight="28.0" prefWidth="178.0" unFocusColor="#f5f5f5">
+            <JFXTextField fx:id="search" focusColor="#546e7a" layoutX="669.0" layoutY="59.0" prefHeight="28.0" prefWidth="178.0" unFocusColor="#f5f5f5">
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
@@ -53,7 +53,7 @@
                </font>
             </Label>
             <MaterialDesignIconView fx:id="close" fill="WHITE" glyphName="CLOSE" layoutX="835.0" layoutY="34.0" onMouseClicked="#closeStage" size="30.0" />
-            <FontAwesomeIconView fx:id="searchIcon" fill="WHITE" glyphName="SEARCH" layoutX="823.0" layoutY="69.0" size="25.0" />
+            <FontAwesomeIconView fx:id="searchIcon" fill="WHITE" glyphName="SEARCH" layoutX="823.0" layoutY="69.0" onMouseClicked="#mouseClicked" size="25.0" />
             <Label layoutX="669.0" layoutY="40.0" prefHeight="25.0" prefWidth="57.0" text="Search">
                <font>
                   <Font size="16.0" />

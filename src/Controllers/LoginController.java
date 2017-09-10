@@ -30,6 +30,9 @@ import javafx.util.Duration;
 import DBConnection.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -76,7 +79,12 @@ public class LoginController implements Initializable{
         stage.close();
     }
     Configs dbCon=null;
-
+    DateFormat dateFormat;
+    Date date;
+    public LoginController(){
+        dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        date = new Date();  
+    }
     @FXML
     void handleOnAction(ActionEvent event) throws IOException {
         
@@ -84,6 +92,7 @@ public class LoginController implements Initializable{
         
         
         if(event.getSource()==login){
+            
             if(loginFun()){
             progress.setVisible(true);
             PauseTransition pt=new PauseTransition();
@@ -153,14 +162,20 @@ public class LoginController implements Initializable{
         String qu="SELECT * FROM user WHERE uId="+id+" AND uPass="+"'"+pass+"'";
         ResultSet rs=dbCon.execQuery(qu);
         try {
-            if(rs.next())
-                return true;
+            if(rs.next()){
+                String dateTime=dateFormat.format(date);
+                qu="insert into trackuser values('"+dateTime+"',"+id+")";
+                dbCon.execAction(qu);
+                return true; 
+            }
             else
                 return false;
         } catch (SQLException ex) {
             System.out.println(ex.toString());
             return false;
         }
+        
+        
     }
     
 }

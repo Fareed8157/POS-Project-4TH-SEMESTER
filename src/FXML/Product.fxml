@@ -71,6 +71,11 @@
                   <Font size="17.0" />
                </font>
             </JFXButton>
+            <JFXButton fx:id="refresh" buttonType="RAISED" layoutX="626.0" layoutY="31.0" onAction="#onAction" prefHeight="65.0" prefWidth="93.0" style="-fx-background-color: #B3E5FC;" text="Refresh" textFill="#757575">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </JFXButton>
          </children>
       </AnchorPane>
    </children>
