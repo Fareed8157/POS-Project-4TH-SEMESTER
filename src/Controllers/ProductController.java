@@ -7,6 +7,7 @@ package Controllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
@@ -118,6 +119,18 @@ public class ProductController implements Initializable{
     @FXML
     private TableColumn<?, ?> stockIn;
 
+    @FXML
+    private JFXButton refresh;
+    
+    @FXML
+    private JFXComboBox<?> suppChose;
+    
+    @FXML
+    private JFXTextField spId;
+
+    @FXML
+    private JFXDatePicker upDate;
+    
     @FXML
     private TableColumn<?, ?> stockOut;
 

@@ -5,6 +5,7 @@
  */
 package MainPack;
 
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -16,7 +17,7 @@ import javafx.scene.image.ImageView;
  *
  * @author Fareed
  */
-public class Category {
+public class Category extends RecursiveTreeObject<Category>{
     private  SimpleIntegerProperty serialNo;
     private  SimpleIntegerProperty id;
     private  SimpleStringProperty name;

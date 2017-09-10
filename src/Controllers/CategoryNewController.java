@@ -32,6 +32,13 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import MainPack.Category;
+import com.jfoenix.validation.RequiredFieldValidator;
+import com.mysql.cj.x.protobuf.Mysqlx.Error.Severity;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Control;
+import javax.xml.bind.Validator;
+import org.controlsfx.validation.ValidationResult;
+import org.controlsfx.validation.ValidationSupport;
 
 /**
  *
@@ -96,6 +103,36 @@ public class CategoryNewController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         
+        RequiredFieldValidator validator=new RequiredFieldValidator();
+        validator.setMessage("No input Given");     
+        nid.getValidators().add(validator);
+        nid.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+                if (!newValue) 
+                    nid.validate();
+        });
+        nName.getValidators().add(validator);
+        nName.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+                if (!newValue) 
+                    nName.validate();
+        });
+        nDesc.getValidators().add(validator);
+        nDesc.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+                if (!newValue) 
+                    nDesc.validate();
+        });
+        nImage.getValidators().add(validator);
+        nImage.focusedProperty().addListener((observable, oldValue, newValue) -> {
+    if(!newValue) { // we only care about loosing focus
+       nImage.validate();
+    }
+});
+//        nImage.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+//                if (!newValue) 
+//                    nImage.validate();
+//                else
+//                    
+//        });
+
         chooseFile=new FileChooser();
         chooseFile.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files","*.jpg","*.png","*.gif"));
         dbCon=Configs.getInstance();
@@ -147,31 +184,30 @@ public class CategoryNewController implements Initializable{
         try {
             if(pst.executeUpdate()!=0){
                 FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/Category.fxml"));
-                Parent root=(Parent)loader.load();
+                
+                
                 CategoryController controller=loader.getController();
                 Category item=new Category(CategoryController.serialno++,Integer.valueOf(id),name,desc,im);
-                //controller.list.add(item);
+                controller.list.add(item);
+                controller.refreshTable();
+                Parent root=(Parent)loader.load();
                 
-                new Thread() {
-                    @Override
-                    public void run() {
- 
-                        //update recordList in Background thread
-                        
-                        
-                        controller.insertData(item);
-                        
-                        
-                    };
-                }.start();
-                //controller.insertData(item);
-                
-                return true;
-                //list.add(new Category(id,name,desc,new Image()))
-            }
+//                new Thread() {
+//                    @Override
+//                    public void run() {
+//                        controller.insertData(item);
+//                        controller.
+//                    };
+//                }.start();
+//                //controller.insertData(item);
+//                
+//                return true;
+//                //list.add(new Category(id,name,desc,new Image()))
+//            }
             
            
-        } catch (SQLException | IOException ex) {
+        } 
+        }catch (SQLException | IOException ex) {
             System.out.println("In else after check");
             System.out.println(ex.toString());
         }
