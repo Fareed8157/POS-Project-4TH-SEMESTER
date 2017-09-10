@@ -48,6 +48,11 @@ import javafx.stage.Modality;
 import javafx.util.Callback;
 import javafx.util.converter.NumberStringConverter;
 import MainPack.*;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import java.util.ArrayList;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 
 /**
  *
@@ -113,6 +118,9 @@ public class CategoryController implements Initializable{
     private TableColumn<Category, ImageView> pic;
 
     @FXML
+    private FontAwesomeIconView searchIcon;
+    
+    @FXML
     private JFXButton newItem;
 
     @FXML
@@ -124,14 +132,29 @@ public class CategoryController implements Initializable{
     @FXML
     private MaterialDesignIconView close;
     
+     @FXML
+    private JFXTextField search;
+     
     Configs dbCon=null;
     
-    //ObservableList<Category> clist=FXCollections.observableArrayList();
     static int serialno=0;
     ObservableList<Category> list=FXCollections.observableArrayList();
+    ObservableList<Category> filteredData=FXCollections.observableArrayList();
     public CategoryController(){
-       //list.add(new Category(1,"SHOES","SHOES ONLY",new Image("file:///C:/Users/AbdulWaheed/Desktop/images.jpg"),100,150,true,true)));
-       //list.add(new Category(1,"SHOES","SHOES ONLY",));
+       list.addListener(new ListChangeListener<Category>() {
+            @Override
+            public void onChanged(ListChangeListener.Change<? extends Category> change) {
+                
+                updateFilteredData();
+                System.out.println("In Constructor");
+            }
+        });
+    }
+    
+    @FXML
+    void mouseClicked(MouseEvent event) {
+        searchIcon.setGlyphStyle("-fx-background-color:#38ee00;");
+        search.requestFocus();
     }
     
     @FXML
@@ -188,33 +211,24 @@ public class CategoryController implements Initializable{
         if(catTable.getSelectionModel().getFocusedIndex()==-1){
             deleteItem.setDisable(true);
             updateItem.setDisable(true);
-            
         }
        
         win.setResizable(false);
     }
     
-    
     public void insertData(Category e){
         list.add(e);
-        
-        //list.removeAll(list);
-        //list.clear();
-        //list.add(item);
-        //loadData();
-        //catTable.setItems(list);
-        
-        System.out.println("Executed");
-        
+        System.out.println("Executed"); 
     }
+    
+     
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        
         updateItem.setDisable(true);
         deleteItem.setDisable(true);
         catTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        
-        
         catTable.setRowFactory(new Callback<TableView<Category>, TableRow<Category>>() {  
         @Override  
         public TableRow<Category> call(TableView<Category> tableView2) {  
@@ -241,8 +255,6 @@ public class CategoryController implements Initializable{
         }  
     });  
     
-
-
         //define columns here
         //cId.setCellValueFactory(new PropertyValueFactory<Category,Number>("id"));
         sno.setCellValueFactory(cellData->cellData.getValue().serialNoProperty());
@@ -255,7 +267,7 @@ public class CategoryController implements Initializable{
         close.requestFocus();
         
         //listnener and make selection
-        catTable.getSelectionModel().selectedItemProperty().addListener(((observable,oldVal,newVal)-> {
+            catTable.getSelectionModel().selectedItemProperty().addListener(((observable,oldVal,newVal)-> {
             updateItem.setDisable(false);
             deleteItem.setDisable(false);
             
@@ -283,12 +295,57 @@ public class CategoryController implements Initializable{
         dbCon=Configs.getInstance();
         loadData();
         catTable.setEditable(true);
+        
+        // Listen for text changes in the filter text field
+        search.textProperty().addListener(new ChangeListener<String>() {
+            
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue) {
+                    
+                updateFilteredData();
+                System.out.println("In search Field");
+            }
+        });
+    }
+    private void updateFilteredData() {
+        filteredData.clear();
+
+        for (Category p : list) {
+            if (matchesFilter(p)) {
+                filteredData.add(p);
+            }
+        }
+
+        // Must re-sort table after items changed
+        //reapplyTableSortOrder();
+    }
+    private boolean matchesFilter(Category ct) {
+        String filterString = search.getText();
+        if (filterString == null || filterString.isEmpty()) {
+            // No filter --> Add all.
+            return true;
+        }
+        String lowerCaseFilterString = filterString.toLowerCase();
+
+        if (ct.getName().toLowerCase().indexOf(lowerCaseFilterString) != -1) {
+            return true;
+        } else if (ct.getId().toString().toLowerCase().indexOf(lowerCaseFilterString) != -1) {
+            return true;
+        }
+
+        return false; // Does not match
     }
     
+    private void reapplyTableSortOrder() {
+        ArrayList<TableColumn<Category, ?>> sortOrder = new ArrayList<>(catTable.getSortOrder());
+        catTable.getSortOrder().clear();
+        catTable.getSortOrder().addAll(sortOrder);
+    }
      void loadData() {
         String qu="SELECT * FROM category";
         ResultSet rs=dbCon.execQuery(qu);
-        
+        System.out.println("In Load Method Starting List=="+list.size()+"filteredData=="+filteredData.size());
         try {
             while(rs.next()){
                 Integer id=rs.getInt(1);
@@ -301,12 +358,9 @@ public class CategoryController implements Initializable{
                 while((size=in.read(content))!=-1){
                     ou.write(content, 0, size);
                 }
-                
                 Image im=new Image("file:photo.jpg",50,100,true,true);
-                
-                
                 list.add(new Category(serialno++,id,name,desc,im));
-                catTable.setItems(list);
+                catTable.setItems(filteredData);
             }
         } catch (SQLException ex) {
           
@@ -315,12 +369,15 @@ public class CategoryController implements Initializable{
         } catch (IOException ex) {
             Logger.getLogger(CategoryController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+         System.out.println("In Load Method List=="+list.size()+"filteredData=="+filteredData.size());
         //catTable.setItems(list);
     }
      
      public void refreshTable(){
          list.clear();
+         filteredData.clear();
+         System.out.println("In Refresh Method Starting List=="+list.size()+"filteredData=="+filteredData.size());
+         System.out.println(list.isEmpty()+" and "+filteredData.isEmpty());
          serialno=0;
          String qu="SELECT * FROM category";
         ResultSet rs=dbCon.execQuery(qu);
@@ -339,20 +396,21 @@ public class CategoryController implements Initializable{
                 }
                 
                 Image im=new Image("file:photo.jpg",50,100,true,true);
-                
+                int i=0;
                 list.add(new Category(serialno++,id,name,desc,im));
-                
-                catTable.setItems(list) ;
+                System.out.println("In Refresh Method inside loop1 List=="+list.size()+"filteredData=="+filteredData.size());
+                //filteredData.add(new Category(serialno++,id,name,desc,im));
+                System.out.println("In Refresh Method inside loop2 List=="+list.size()+"filteredData=="+filteredData.size());
+                System.out.println();
+                catTable.setItems(filteredData) ;
             }
         } catch (SQLException ex) {
-          
         } catch (FileNotFoundException ex) {
             System.out.println(ex.toString());
         } catch (IOException ex) {
             Logger.getLogger(CategoryController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        //catTable.setItems(list);
+         System.out.println("In Refresh Method List=="+list.size()+"filteredData=="+filteredData.size());
      }
 
     
@@ -371,20 +429,12 @@ public class CategoryController implements Initializable{
          cell=(TableColumn.CellEditEvent<Category, Number>) e;
          int i=Integer.parseInt(cell.getNewValue().toString());
          try {
-                 
-                 if(cell.getNewValue().toString()!=cell.getOldValue().toString()){
-             
-                     update(cell);
+             if(cell.getNewValue().toString()!=cell.getOldValue().toString()){
+              update(cell);
                 }
-                 
              } catch (Exception  numberFormatException) {
                  errorMessage("Enter Valide Number");
              }
-         
-         
-        //Category st=cell.getRowValue();
-        
-         
          refreshTable();
     }
 
@@ -422,7 +472,6 @@ public class CategoryController implements Initializable{
         if(flag){
             errorMessage("Duplicate ID");
         }
-        
     }
         
 
@@ -449,8 +498,6 @@ public class CategoryController implements Initializable{
             if(dbCon.execAction(qu))
             infoMessage("Update Successfully In Database");
         }
-        
-       
     }
     
     
