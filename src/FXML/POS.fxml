@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="631.0" prefWidth="983.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.posController">
+   <children>
+      <BorderPane layoutX="187.0" layoutY="14.0" prefHeight="595.0" prefWidth="789.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <right>
+            <AnchorPane prefHeight="515.0" prefWidth="257.0" style="-fx-background-color: #29B6F6;" BorderPane.alignment="CENTER">
+               <children>
+                  <AnchorPane layoutX="6.0" layoutY="80.0" prefHeight="200.0" prefWidth="242.0" style="-fx-background-color: #42A5F5; -fx-border-color: #ffffff;" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="5.0">
+                     <children>
+                        <Label layoutX="6.0" layoutY="65.0" prefHeight="22.0" prefWidth="84.0" text="Sub Total" textFill="#212121">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="6.0" layoutY="110.0" prefHeight="22.0" prefWidth="84.0" text="Tax" textFill="#212121">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="6.0" layoutY="152.0" prefHeight="28.0" prefWidth="99.0" text="Grand Total" textFill="#212121">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="subTotalLabel" layoutX="155.0" layoutY="63.0" prefHeight="30.0" prefWidth="77.0" style="-fx-border-color: #ffffff;" text="label" textFill="#212121">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="taxLabel" layoutX="155.0" layoutY="108.0" prefHeight="30.0" prefWidth="77.0" style="-fx-border-color: #ffffff;" text="label" textFill="#212121">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="grandTotalLab" layoutX="128.0" layoutY="151.0" prefHeight="30.0" prefWidth="104.0" style="-fx-border-color: #ffffff;" text="label" textFill="#212121">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="6.0" layoutY="16.0" prefHeight="22.0" prefWidth="84.0" text="Total Item" textFill="#212121">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="itemNoLabel" layoutX="155.0" layoutY="14.0" prefHeight="30.0" prefWidth="77.0" style="-fx-border-color: #ffffff;" text="label" textFill="#212121">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="6.0" layoutY="307.0" prefHeight="208.0" prefWidth="246.0" style="-fx-border-color: #ffffff; -fx-background-color: #42A5F5;" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="307.0">
+                     <children>
+                        <JFXButton fx:id="printInvoice" layoutX="12.0" layoutY="14.0" onAction="#onAction" prefHeight="58.0" prefWidth="103.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #0277BD;" text="Print Invoice" textFill="#757575">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton fx:id="discount" layoutX="12.0" layoutY="88.0" onAction="#onAction" prefHeight="58.0" prefWidth="103.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #0277BD;" text="Discount" textFill="#757575">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton fx:id="pay" layoutX="131.0" layoutY="88.0" onAction="#onAction" prefHeight="58.0" prefWidth="104.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #0277BD;" text="Pay" textFill="#757575">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton fx:id="closeButton" layoutX="11.0" layoutY="160.0" onAction="#onAction" prefHeight="32.0" prefWidth="223.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #0277BD;" text="Close" textFill="#757575">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton fx:id="deletItem" layoutX="132.0" layoutY="14.0" onAction="#onAction" prefHeight="58.0" prefWidth="103.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #0277BD;" text="Delete" textFill="#757575">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="5.0" layoutY="5.0" prefHeight="48.0" prefWidth="242.0" style="-fx-background-color: #42A5F5; -fx-border-color: #ffffff;" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="5.0">
+                     <children>
+                        <Label layoutX="14.0" layoutY="13.0" prefHeight="26.0" prefWidth="94.0" text="Invoice No :" textFill="#212121">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="invoiceNoLabel" layoutX="108.0" layoutY="14.0" prefHeight="26.0" prefWidth="56.0" text="label" textFill="#212121">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </right>
+         <center>
+            <AnchorPane prefHeight="529.0" prefWidth="959.0" style="-fx-background-color: #29B6F6;" BorderPane.alignment="CENTER">
+               <children>
+                  <AnchorPane layoutX="5.0" layoutY="7.0" prefHeight="509.0" prefWidth="714.0" style="-fx-border-color: #ffffff;" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="6.0">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                     <children>
+                        <TableView fx:id="posTable" layoutX="5.0" layoutY="6.0" prefHeight="513.0" prefWidth="924.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <columns>
+                              <TableColumn fx:id="id" prefWidth="92.0" text="Item ID" />
+                              <TableColumn fx:id="name" prefWidth="169.0" text="Name" />
+                              <TableColumn fx:id="desc" prefWidth="200.0" text="Description" />
+                              <TableColumn fx:id="qt" prefWidth="116.0" text="Quantity" />
+                              <TableColumn fx:id="price" prefWidth="113.0" text="Price" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </center>
+         <top>
+            <AnchorPane prefHeight="102.0" prefWidth="953.0" style="-fx-background-color: #29B6F6;" BorderPane.alignment="CENTER">
+               <children>
+                  <JFXTextField fx:id="search" layoutX="307.0" layoutY="49.0" prefHeight="39.0" prefWidth="411.0" AnchorPane.leftAnchor="307.0" AnchorPane.rightAnchor="265.0">
+                     <font>
+                        <Font size="21.0" />
+                     </font>
+                  </JFXTextField>
+                  <FontAwesomeIconView fill="#eeecec" glyphName="SEARCH" layoutX="699.0" layoutY="75.0" size="20.0" text="" AnchorPane.rightAnchor="265.4285717010498" AnchorPane.topAnchor="57.85714340209961" />
+                  <FontAwesomeIconView fx:id="close" fill="#f5f5f5" glyphName="CLOSE" layoutX="935.0" layoutY="34.0" onMouseClicked="#closeStage" size="30.0" AnchorPane.rightAnchor="24.428571701049805" />
+                  <Label layoutX="307.0" layoutY="24.0" prefHeight="25.0" prefWidth="56.0" text="Search" textFill="#212121">
+                     <font>
+                        <Font size="19.0" />
+                     </font>
+                  </Label>
+               </children></AnchorPane>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>

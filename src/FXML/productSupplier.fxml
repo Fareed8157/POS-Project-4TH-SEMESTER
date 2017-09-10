@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="563.0" prefWidth="783.0" style="-fx-background-color: #F5F5F5;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ProductController">
+   <children>
+      <BorderPane layoutX="169.0" layoutY="88.0" prefHeight="508.0" prefWidth="765.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <AnchorPane style="-fx-background-color: #29B6F6;" BorderPane.alignment="CENTER">
+               <children>
+                  <AnchorPane layoutX="5.0" prefHeight="494.0" prefWidth="583.0" style="-fx-border-color: #ffffff;" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <AnchorPane />
+                     </children>
+                  </AnchorPane>
+                  <TableView fx:id="suppTable" layoutX="9.0" layoutY="4.0" prefHeight="486.0" prefWidth="575.0" style="-fx-border-color: #a0a2ab;" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="4.0">
+                     <columns>
+                        <TableColumn fx:id="sFname" prefWidth="143.0" text="First Name" />
+                        <TableColumn fx:id="sLname" prefWidth="134.0" text="Last Name" />
+                        <TableColumn fx:id="sEmail" prefWidth="143.0" text="Email" />
+                        <TableColumn fx:id="sPhno" prefWidth="169.0" text="Phone No" />
+                     </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+         </center>
+         <right>
+            <AnchorPane prefHeight="487.0" prefWidth="191.0" style="-fx-background-color: #29B6F6; -fx-border-color: #ffffff;" BorderPane.alignment="CENTER">
+               <children>
+                  <JFXTextField fx:id="sFnamField" focusColor="#546e7a" layoutX="16.0" layoutY="38.0" prefHeight="25.0" prefWidth="156.0" unFocusColor="#b3dff2">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </JFXTextField>
+                  <JFXTextField fx:id="sLnamField" focusColor="#546e7a" layoutX="14.0" layoutY="114.0" prefHeight="25.0" prefWidth="156.0" unFocusColor="#b3e5fc">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </JFXTextField>
+                  <JFXTextField fx:id="sEmailField" focusColor="#546e7a" labelFloat="true" layoutX="16.0" layoutY="188.0" prefHeight="25.0" prefWidth="156.0" unFocusColor="#b3e5fc">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </JFXTextField>
+                  <JFXTextField fx:id="sPhnoFiled" focusColor="#546e7a" layoutX="15.0" layoutY="262.0" prefHeight="25.0" prefWidth="156.0" unFocusColor="#b3e5fc">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </JFXTextField>
+                  <Label layoutX="16.0" layoutY="14.0" prefHeight="23.0" prefWidth="77.0" text="First Name" textFill="#546e7a">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="15.0" layoutY="89.0" prefHeight="23.0" prefWidth="77.0" text="Last Name" textFill="#546e7a">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="16.0" layoutY="163.0" prefHeight="23.0" prefWidth="77.0" text="Email" textFill="#546e7a">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="15.0" layoutY="237.0" prefHeight="23.0" prefWidth="77.0" text="Phone No" textFill="#546e7a">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <JFXButton fx:id="sAdd" layoutX="16.0" layoutY="337.0" onAction="#supplierHandler" prefHeight="35.0" prefWidth="160.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #1565C0;" text="Add" textFill="#757575" />
+                  <JFXButton fx:id="sDel" layoutX="16.0" layoutY="384.0" onAction="#supplierHandler" prefHeight="35.0" prefWidth="160.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #1565C0;" text="Delete" textFill="#757575" />
+                  <JFXButton fx:id="sUpdate" layoutX="16.0" layoutY="435.0" onAction="#supplierHandler" prefHeight="35.0" prefWidth="160.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #1565C0;" text="Update" textFill="#757575" />
+               </children>
+            </AnchorPane>
+         </right>
+         <top>
+            <AnchorPane prefHeight="66.0" prefWidth="749.0" style="-fx-background-color: #29B6F6;" BorderPane.alignment="CENTER">
+               <children>
+                  <JFXTextField fx:id="suppSearch" focusColor="#546e7a" labelFloat="true" layoutX="417.0" layoutY="28.0" prefHeight="33.0" prefWidth="171.0" unFocusColor="#b3dff2">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </JFXTextField>
+                  <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" layoutX="564.0" layoutY="52.0" size="25.0" />
+                  <MaterialDesignIconView fx:id="closeSupplier" fill="WHITE" glyphName="CLOSE" layoutX="730.0" layoutY="39.0" size="30.0" AnchorPane.rightAnchor="23.0" />
+                  <Label layoutX="417.0" layoutY="6.0" prefHeight="23.0" prefWidth="77.0" text="Search" textFill="#546e7a">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>
