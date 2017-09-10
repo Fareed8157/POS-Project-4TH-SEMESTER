@@ -47,7 +47,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.util.Callback;
 import javafx.util.converter.NumberStringConverter;
-import student.Category;
+import MainPack.*;
 
 /**
  *

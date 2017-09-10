@@ -29,7 +29,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import student.Category;
+import MainPack.Category;
 
 
 public class CategoryUpdateContoller implements Initializable{
@@ -138,6 +138,7 @@ public class CategoryUpdateContoller implements Initializable{
         if(!upImage.getText().equals(upCat.getImv().toString())){
             qu="UPDATE category SET CategoryID=? ,CategoryName=?, Description=?, Picture=? WHERE CategoryID="+orId;
             if(!checkDuplicate(id,1) && !checkDuplicate(name,2)){
+                System.out.println("After Check");
             pst=dbCon.execQueryPrep(qu);
             try {
             pst.setInt(1, Integer.valueOf(upId.getText().trim()));
@@ -163,6 +164,7 @@ public class CategoryUpdateContoller implements Initializable{
             System.out.println("In else");
             qu="UPDATE category SET CategoryID="+id+","+"CategoryName='"+name+"',"+ "Description='"+desc+"' WHERE CategoryID="+orId;
             //qu="UPDATE category SET CategoryID=? ,CategoryName=?, Description=? WHERE CategoryID= "+id;
+            if(!checkDuplicate(id,1) && !checkDuplicate(name,2)){
             if(dbCon.execAction(qu)){
                 System.out.println("exeAction");
                 FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/Category.fxml"));
@@ -170,7 +172,11 @@ public class CategoryUpdateContoller implements Initializable{
             CategoryController cg=loader.getController();
             cg.refreshTable();
             return true;
-            }   
+            }
+          }
+            else{
+                errorMessage("Duplicate Values");
+            }
         }
         
         return false;
