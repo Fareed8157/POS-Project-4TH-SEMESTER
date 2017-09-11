@@ -33,77 +33,8 @@ import javafx.stage.Stage;
 public class ProductController implements Initializable{
 
     @FXML
-    private TableView<?> suppTable;
-
-    @FXML
-    private TableColumn<?, ?> sFname;
-
-    @FXML
-    private TableColumn<?, ?> sLname;
-
-    @FXML
-    private TableColumn<?, ?> sEmail;
-
-    @FXML
-    private TableColumn<?, ?> sPhno;
-
-    @FXML
-    private JFXTextField sFnamField;
-
-    @FXML
-    private JFXTextField sLnamField;
-
-    @FXML
-    private JFXTextField sEmailField;
-
-    @FXML
-    private JFXTextField sPhnoFiled;
-
-    @FXML
-    private JFXButton sAdd;
-
-    @FXML
-    private JFXButton sDel;
-
-    @FXML
-    private JFXButton sUpdate;
-
-    @FXML
-    private JFXTextField suppSearch;
-
-    @FXML
-    private MaterialDesignIconView closeSupplier;
-
-    @FXML
-    private JFXButton supplier;
-    
-    @FXML
     private TableView<?> proTable;
-     
-    @FXML
-    private JFXTextField nId;
 
-    @FXML
-    private JFXTextField nName;
-
-    @FXML
-    private JFXTextField nPrice;
-
-    @FXML
-    private JFXButton nSave;
-
-    @FXML
-    private JFXButton nCancel;
-
-    @FXML
-    private JFXTextField nStockIn;
-
-    @FXML
-    private JFXComboBox<?> nCategory;
-
-    @FXML
-    private JFXTextField nDesc;
-    
     @FXML
     private TableColumn<?, ?> id;
 
@@ -120,22 +51,13 @@ public class ProductController implements Initializable{
     private TableColumn<?, ?> stockIn;
 
     @FXML
-    private JFXButton refresh;
-    
-    @FXML
-    private JFXComboBox<?> suppChose;
-    
-    @FXML
-    private JFXTextField spId;
-
-    @FXML
-    private JFXDatePicker upDate;
-    
-    @FXML
     private TableColumn<?, ?> stockOut;
 
     @FXML
     private TableColumn<?, ?> pCategory;
+
+    @FXML
+    private TableColumn<?, ?> pic;
 
     @FXML
     private JFXButton newItem;
@@ -159,20 +81,22 @@ public class ProductController implements Initializable{
     private FontAwesomeIconView searchIcon;
 
     @FXML
+    private JFXButton supplier;
+
+    @FXML
+    private JFXButton refresh;
+
+     @FXML
+    void searchIconMethod(MouseEvent event) {
+
+    }
+    
+    @FXML
     void closeStage(MouseEvent event) {
         Stage stage=(Stage)close.getScene().getWindow();
         stage.close();
     }
 
-    @FXML
-    void newItemHandler(ActionEvent event) {
-
-    }
-    
-    @FXML
-    void supplierHandler(ActionEvent event) {
-
-    }
     
     @FXML
     void onAction(ActionEvent event) throws IOException {

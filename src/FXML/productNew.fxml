@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -11,11 +12,17 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="524.0" prefWidth="719.0" style="-fx-background-color: #F5F5F5;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ProductController">
+<AnchorPane id="AnchorPane" prefHeight="576.0" prefWidth="719.0" style="-fx-background-color: #F5F5F5;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ProductNewController">
    <children>
-      <VBox layoutX="25.0" layoutY="54.0" prefHeight="346.0" prefWidth="308.0">
+      <Label layoutX="25.0" layoutY="14.0" text="Products Details">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <MaterialDesignIconView fill="#5b4040" glyphName="CLOSE" layoutX="675.0" layoutY="40.0" size="30.0" />
+      <VBox layoutX="25.0" layoutY="103.0" prefHeight="349.0" prefWidth="308.0">
          <children>
-            <JFXTextField fx:id="nId" focusColor="#546e7a" labelFloat="true" prefHeight="34.0" prefWidth="284.0" promptText="ID " unFocusColor="#b3e5fc">
+            <JFXTextField fx:id="nId" focusColor="#546e7a" labelFloat="true" prefHeight="34.0" prefWidth="284.0" promptText="Bar Code" unFocusColor="#b3e5fc">
                <font>
                   <Font size="17.0" />
                </font>
@@ -39,14 +46,67 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="40.0" />
                </VBox.margin>
             </JFXTextField>
-            <JFXComboBox fx:id="suppChose" prefHeight="42.0" prefWidth="288.0" unFocusColor="#b3e5fc">
+            <JFXComboBox fx:id="suppChose" prefHeight="42.0" prefWidth="288.0" promptText="Supplier" unFocusColor="#b3e5fc">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="40.0" />
                </VBox.margin>
             </JFXComboBox>
          </children>
       </VBox>
-      <HBox layoutX="176.0" layoutY="418.0" prefHeight="58.0" prefWidth="364.0">
+      <VBox layoutX="388.0" layoutY="39.0" prefHeight="413.0" prefWidth="308.0">
+         <children>
+            <JFXTextField fx:id="nStockIn" focusColor="#546e7a" labelFloat="true" prefHeight="27.0" prefWidth="288.0" promptText="Stock In" unFocusColor="#b3e5fc">
+               <font>
+                  <Font size="17.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="40.0" />
+               </VBox.margin>
+            </JFXTextField>
+            <JFXDatePicker fx:id="stkInDate" defaultColor="#b3e5fc" prefHeight="38.0" prefWidth="288.0" promptText="Stock In Date">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="40.0" />
+               </VBox.margin>
+            </JFXDatePicker>
+            <JFXComboBox fx:id="nCategory" focusColor="#546e7a" prefHeight="42.0" prefWidth="288.0" promptText="Category" unFocusColor="#b3e5fc">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="35.0" />
+               </VBox.margin>
+            </JFXComboBox>
+            <JFXTextField fx:id="nDesc" focusColor="#546e7a" labelFloat="true" prefHeight="31.0" prefWidth="288.0" promptText="Description" unFocusColor="#b3e5fc">
+               <font>
+                  <Font size="17.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="35.0" />
+               </VBox.margin>
+            </JFXTextField>
+            <HBox prefHeight="48.0" prefWidth="297.0">
+               <children>
+                  <JFXTextField fx:id="picField" focusColor="#546e7a" labelFloat="true" prefHeight="52.0" prefWidth="194.0" promptText="Stock In" unFocusColor="#b3e5fc">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
+                  </JFXTextField>
+                  <JFXButton fx:id="browse" onAction="#newItemHandler" prefHeight="40.0" prefWidth="103.0" style="-fx-background-color: #B3E5FC;" text="Browse" textFill="#757575">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" top="40.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+      <HBox layoutX="178.0" layoutY="470.0" prefHeight="58.0" prefWidth="364.0">
          <children>
             <JFXButton fx:id="nSave" onAction="#newItemHandler" prefHeight="48.0" prefWidth="175.0" style="-fx-background-color: #B3E5FC;" text="Save" textFill="#757575">
                <HBox.margin>
@@ -66,40 +126,5 @@
             </JFXButton>
          </children>
       </HBox>
-      <VBox layoutX="386.0" layoutY="59.0" prefHeight="336.0" prefWidth="308.0">
-         <children>
-            <JFXTextField fx:id="nStockIn" focusColor="#546e7a" labelFloat="true" prefHeight="27.0" prefWidth="288.0" promptText="Stock In" unFocusColor="#b3e5fc">
-               <font>
-                  <Font size="17.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="40.0" />
-               </VBox.margin>
-            </JFXTextField>
-            <JFXComboBox fx:id="nCategory" prefHeight="42.0" prefWidth="288.0" unFocusColor="#b3e5fc">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="35.0" />
-               </VBox.margin>
-            </JFXComboBox>
-            <JFXTextField fx:id="nDesc" focusColor="#546e7a" labelFloat="true" prefHeight="31.0" prefWidth="288.0" promptText="Description" unFocusColor="#b3e5fc">
-               <font>
-                  <Font size="17.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="35.0" />
-               </VBox.margin>
-            </JFXTextField>
-            <JFXDatePicker fx:id="upDate" defaultColor="#b3e5fc" prefHeight="38.0" prefWidth="288.0">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="40.0" />
-               </VBox.margin>
-            </JFXDatePicker>
-         </children>
-      </VBox>
-      <Label layoutX="274.0" layoutY="21.0" text="Products Details">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
    </children>
 </AnchorPane>

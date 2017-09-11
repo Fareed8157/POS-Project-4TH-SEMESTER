@@ -138,6 +138,7 @@ public class CategoryController implements Initializable{
     Configs dbCon=null;
     
     static int serialno=0;
+    ObservableList<Category> selectedRows,allCategories;          //list to remove muktiple rows
     ObservableList<Category> list=FXCollections.observableArrayList();
     ObservableList<Category> filteredData=FXCollections.observableArrayList();
     public CategoryController(){
@@ -191,6 +192,10 @@ public class CategoryController implements Initializable{
             stage.close();
         }
         else if(event.getSource()==deleteItem){
+            ObservableList<Category> selectedRows,allCategories;
+            
+            selectedRows=catTable.getSelectionModel().getSelectedItems();
+            
             Integer id=catTable.getSelectionModel().getSelectedItem().getId();
             Alert a1= new Alert(Alert.AlertType.CONFIRMATION);
             a1.setTitle("Confirmation Dialog");
@@ -199,7 +204,7 @@ public class CategoryController implements Initializable{
             Optional<ButtonType> action=a1.showAndWait();
             win.initModality(Modality.WINDOW_MODAL);
             if(action.get()==ButtonType.OK){
-            removeRecord(id);    
+            removeRecords(selectedRows);    
             }
             
         }
@@ -414,12 +419,15 @@ public class CategoryController implements Initializable{
      }
 
     
-    private void removeRecord(Integer id) {
-        String qu="DELETE FROM category where CategoryId="+id;
+    private void removeRecords(ObservableList<Category> record) {
+        for(Category id : record){
+            String qu="DELETE FROM category where CategoryId="+id;
         if(dbCon.execAction(qu)){
             refreshTable();
             serialno--;
+             }
         }
+        
     }
 
     //UPDATE METHODS
