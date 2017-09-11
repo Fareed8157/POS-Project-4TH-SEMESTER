@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="563.0" prefWidth="783.0" style="-fx-background-color: #F5F5F5;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ProductSuppController">
+<AnchorPane id="AnchorPane" prefHeight="650.0" prefWidth="1150.0" style="-fx-background-color: #F5F5F5;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ProductSuppController">
    <children>
       <BorderPane layoutX="169.0" layoutY="88.0" prefHeight="508.0" prefWidth="765.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
@@ -22,79 +22,95 @@
                         <AnchorPane />
                      </children>
                   </AnchorPane>
-                  <TableView fx:id="suppTable" layoutX="9.0" layoutY="4.0" prefHeight="486.0" prefWidth="575.0" style="-fx-border-color: #a0a2ab;" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="4.0">
+                  <TableView fx:id="suppTable" layoutX="9.0" layoutY="5.0" prefHeight="486.0" prefWidth="575.0" style="-fx-border-color: #a0a2ab;" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="5.0">
                      <columns>
-                        <TableColumn fx:id="sFname" prefWidth="143.0" text="First Name" />
-                        <TableColumn fx:id="sLname" prefWidth="134.0" text="Last Name" />
-                        <TableColumn fx:id="sEmail" prefWidth="143.0" text="Email" />
-                        <TableColumn fx:id="sPhno" prefWidth="169.0" text="Phone No" />
+                        <TableColumn fx:id="sId" prefWidth="96.0" text="ID" />
+                        <TableColumn fx:id="sFname" prefWidth="182.99996948242188" text="First Name" />
+                        <TableColumn fx:id="sLname" prefWidth="162.0" text="Last Name" />
+                        <TableColumn fx:id="sEmail" prefWidth="266.0" text="Email" />
+                        <TableColumn fx:id="sPhno" prefWidth="202.0" text="Phone No" />
                      </columns>
                   </TableView>
                </children>
             </AnchorPane>
          </center>
          <right>
-            <AnchorPane prefHeight="487.0" prefWidth="191.0" style="-fx-background-color: #29B6F6; -fx-border-color: #ffffff;" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="584.0" prefWidth="222.0" style="-fx-background-color: #29B6F6; -fx-border-color: #ffffff;" BorderPane.alignment="CENTER">
                <children>
-                  <JFXTextField fx:id="sFnamField" focusColor="#546e7a" layoutX="16.0" layoutY="38.0" prefHeight="25.0" prefWidth="156.0" unFocusColor="#b3dff2">
+                  <JFXTextField fx:id="fname" focusColor="#546e7a" layoutX="15.0" layoutY="115.0" prefHeight="33.0" prefWidth="194.0" unFocusColor="#b3dff2">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </JFXTextField>
-                  <JFXTextField fx:id="sLnamField" focusColor="#546e7a" layoutX="14.0" layoutY="114.0" prefHeight="25.0" prefWidth="156.0" unFocusColor="#b3e5fc">
+                  <JFXTextField fx:id="lname" focusColor="#546e7a" layoutX="13.0" layoutY="191.0" prefHeight="34.0" prefWidth="194.0" unFocusColor="#b3e5fc">
                      <font>
                         <Font size="17.0" />
                      </font>
                   </JFXTextField>
-                  <JFXTextField fx:id="sEmailField" focusColor="#546e7a" labelFloat="true" layoutX="16.0" layoutY="188.0" prefHeight="25.0" prefWidth="156.0" unFocusColor="#b3e5fc">
+                  <JFXTextField fx:id="email" focusColor="#546e7a" labelFloat="true" layoutX="15.0" layoutY="265.0" prefHeight="34.0" prefWidth="194.0" unFocusColor="#b3e5fc">
                      <font>
                         <Font size="17.0" />
                      </font>
                   </JFXTextField>
-                  <JFXTextField fx:id="sPhnoFiled" focusColor="#546e7a" layoutX="15.0" layoutY="262.0" prefHeight="25.0" prefWidth="156.0" unFocusColor="#b3e5fc">
+                  <JFXTextField fx:id="phno" focusColor="#546e7a" layoutX="14.0" layoutY="339.0" prefHeight="34.0" prefWidth="193.0" unFocusColor="#b3e5fc">
                      <font>
                         <Font size="17.0" />
                      </font>
                   </JFXTextField>
-                  <Label layoutX="16.0" layoutY="14.0" prefHeight="23.0" prefWidth="77.0" text="First Name" textFill="#546e7a">
+                  <Label layoutX="14.0" layoutY="91.0" prefHeight="23.0" prefWidth="77.0" text="First Name" textFill="#546e7a">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <Label layoutX="15.0" layoutY="89.0" prefHeight="23.0" prefWidth="77.0" text="Last Name" textFill="#546e7a">
+                  <Label layoutX="14.0" layoutY="166.0" prefHeight="23.0" prefWidth="77.0" text="Last Name" textFill="#546e7a">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <Label layoutX="16.0" layoutY="163.0" prefHeight="23.0" prefWidth="77.0" text="Email" textFill="#546e7a">
+                  <Label layoutX="15.0" layoutY="240.0" prefHeight="23.0" prefWidth="77.0" text="Email" textFill="#546e7a">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <Label layoutX="15.0" layoutY="237.0" prefHeight="23.0" prefWidth="77.0" text="Phone No" textFill="#546e7a">
+                  <Label layoutX="14.0" layoutY="314.0" prefHeight="23.0" prefWidth="77.0" text="Phone No" textFill="#546e7a">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <JFXButton fx:id="sAdd" layoutX="16.0" layoutY="337.0" onAction="#supplierHandler" prefHeight="35.0" prefWidth="160.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #1565C0;" text="Add" textFill="#757575" />
-                  <JFXButton fx:id="sDel" layoutX="16.0" layoutY="384.0" onAction="#supplierHandler" prefHeight="35.0" prefWidth="160.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #1565C0;" text="Delete" textFill="#757575" />
-                  <JFXButton fx:id="sUpdate" layoutX="16.0" layoutY="435.0" onAction="#supplierHandler" prefHeight="35.0" prefWidth="160.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #1565C0;" text="Update" textFill="#757575" />
+                  <JFXButton fx:id="add" layoutX="15.0" layoutY="414.0" onAction="#onAction" prefHeight="35.0" prefWidth="189.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #1565C0;" text="Add" textFill="#757575" />
+                  <JFXButton fx:id="delete" layoutX="15.0" layoutY="461.0" onAction="#onAction" prefHeight="35.0" prefWidth="190.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #1565C0;" text="Delete" textFill="#757575" />
+                  <JFXButton fx:id="update" layoutX="15.0" layoutY="512.0" onAction="#onAction" prefHeight="35.0" prefWidth="190.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #1565C0;" text="Update" textFill="#757575" />
+                  <JFXTextField fx:id="id" focusColor="#546e7a" layoutX="13.0" layoutY="38.0" prefHeight="33.0" prefWidth="194.0" unFocusColor="#b3dff2">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </JFXTextField>
+                  <Label layoutX="12.0" layoutY="14.0" prefHeight="23.0" prefWidth="77.0" text="ID" textFill="#546e7a">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
          </right>
          <top>
             <AnchorPane prefHeight="66.0" prefWidth="749.0" style="-fx-background-color: #29B6F6;" BorderPane.alignment="CENTER">
                <children>
-                  <JFXTextField fx:id="suppSearch" focusColor="#546e7a" labelFloat="true" layoutX="417.0" layoutY="28.0" prefHeight="33.0" prefWidth="171.0" unFocusColor="#b3dff2">
+                  <JFXTextField fx:id="search" focusColor="#546e7a" labelFloat="true" layoutX="751.0" layoutY="26.0" prefHeight="33.0" prefWidth="171.0" unFocusColor="#b3dff2">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </JFXTextField>
-                  <FontAwesomeIconView fx:id="searcIcon" fill="WHITE" glyphName="SEARCH" layoutX="564.0" layoutY="52.0" onMouseClicked="#searchIconMethod" size="25.0" />
-                  <MaterialDesignIconView fx:id="closeSupplier" fill="WHITE" glyphName="CLOSE" layoutX="730.0" layoutY="39.0" onMouseClicked="#closeStage" size="30.0" AnchorPane.rightAnchor="23.0" />
-                  <Label layoutX="417.0" layoutY="6.0" prefHeight="23.0" prefWidth="77.0" text="Search" textFill="#546e7a">
+                  <FontAwesomeIconView fx:id="searcIcon" fill="WHITE" glyphName="SEARCH" layoutX="898.0" layoutY="50.0" onMouseClicked="#searchIconMethod" size="25.0" />
+                  <MaterialDesignIconView fx:id="close" fill="WHITE" glyphName="CLOSE" layoutX="730.0" layoutY="39.0" onMouseClicked="#closeStage" size="30.0" AnchorPane.rightAnchor="23.0" />
+                  <Label layoutX="751.0" prefHeight="23.0" prefWidth="77.0" text="Search" textFill="#546e7a">
                      <font>
                         <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="20.0" layoutY="16.0" prefHeight="34.0" prefWidth="220.0" text="Supplier Information" textFill="WHITE">
+                     <font>
+                        <Font size="23.0" />
                      </font>
                   </Label>
                </children>

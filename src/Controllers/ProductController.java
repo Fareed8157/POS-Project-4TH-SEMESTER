@@ -23,6 +23,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -54,10 +55,13 @@ public class ProductController implements Initializable{
     private TableColumn<?, ?> stockOut;
 
     @FXML
-    private TableColumn<?, ?> pCategory;
+    private ImageView imv;
 
     @FXML
-    private TableColumn<?, ?> pic;
+    private JFXButton browse;
+    
+    @FXML
+    private TableColumn<?, ?> pCategory;
 
     @FXML
     private JFXButton newItem;

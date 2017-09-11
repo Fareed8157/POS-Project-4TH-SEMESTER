@@ -19,10 +19,10 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <MaterialDesignIconView fill="#5b4040" glyphName="CLOSE" layoutX="675.0" layoutY="40.0" size="30.0" />
+      <MaterialDesignIconView fx:id="close" fill="#5b4040" glyphName="CLOSE" layoutX="675.0" layoutY="40.0" onMouseClicked="#closeStage" size="30.0" />
       <VBox layoutX="25.0" layoutY="103.0" prefHeight="349.0" prefWidth="308.0">
          <children>
-            <JFXTextField fx:id="nId" focusColor="#546e7a" labelFloat="true" prefHeight="34.0" prefWidth="284.0" promptText="Bar Code" unFocusColor="#b3e5fc">
+            <JFXTextField fx:id="barcode" focusColor="#546e7a" labelFloat="true" prefHeight="34.0" prefWidth="284.0" promptText="Bar Code" unFocusColor="#b3e5fc">
                <font>
                   <Font size="17.0" />
                </font>
@@ -30,7 +30,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="40.0" />
                </VBox.margin>
             </JFXTextField>
-            <JFXTextField fx:id="nName" focusColor="#546e7a" labelFloat="true" prefHeight="33.0" prefWidth="384.0" promptText="Name" unFocusColor="#b3e5fc">
+            <JFXTextField fx:id="name" focusColor="#546e7a" labelFloat="true" prefHeight="33.0" prefWidth="384.0" promptText="Name" unFocusColor="#b3e5fc">
                <font>
                   <Font size="17.0" />
                </font>
@@ -38,7 +38,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="40.0" />
                </VBox.margin>
             </JFXTextField>
-            <JFXTextField fx:id="nPrice" focusColor="#546e7a" labelFloat="true" prefHeight="33.0" prefWidth="384.0" promptText="Unit Price" unFocusColor="#b3e5fc">
+            <JFXTextField fx:id="uPrice" focusColor="#546e7a" labelFloat="true" prefHeight="33.0" prefWidth="384.0" promptText="Unit Price" unFocusColor="#b3e5fc">
                <font>
                   <Font size="17.0" />
                </font>
@@ -55,7 +55,7 @@
       </VBox>
       <VBox layoutX="388.0" layoutY="39.0" prefHeight="413.0" prefWidth="308.0">
          <children>
-            <JFXTextField fx:id="nStockIn" focusColor="#546e7a" labelFloat="true" prefHeight="27.0" prefWidth="288.0" promptText="Stock In" unFocusColor="#b3e5fc">
+            <JFXTextField fx:id="stockIn" focusColor="#546e7a" labelFloat="true" prefHeight="27.0" prefWidth="288.0" promptText="Stock In" unFocusColor="#b3e5fc">
                <font>
                   <Font size="17.0" />
                </font>
@@ -68,12 +68,12 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="40.0" />
                </VBox.margin>
             </JFXDatePicker>
-            <JFXComboBox fx:id="nCategory" focusColor="#546e7a" prefHeight="42.0" prefWidth="288.0" promptText="Category" unFocusColor="#b3e5fc">
+            <JFXComboBox fx:id="category" focusColor="#546e7a" prefHeight="42.0" prefWidth="288.0" promptText="Category" unFocusColor="#b3e5fc">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="35.0" />
                </VBox.margin>
             </JFXComboBox>
-            <JFXTextField fx:id="nDesc" focusColor="#546e7a" labelFloat="true" prefHeight="31.0" prefWidth="288.0" promptText="Description" unFocusColor="#b3e5fc">
+            <JFXTextField fx:id="desc" focusColor="#546e7a" labelFloat="true" prefHeight="31.0" prefWidth="288.0" promptText="Description" unFocusColor="#b3e5fc">
                <font>
                   <Font size="17.0" />
                </font>
@@ -91,7 +91,7 @@
                         <Insets top="10.0" />
                      </HBox.margin>
                   </JFXTextField>
-                  <JFXButton fx:id="browse" onAction="#newItemHandler" prefHeight="40.0" prefWidth="103.0" style="-fx-background-color: #B3E5FC;" text="Browse" textFill="#757575">
+                  <JFXButton fx:id="browse" onAction="#onAction" prefHeight="40.0" prefWidth="103.0" style="-fx-background-color: #B3E5FC;" text="Browse" textFill="#757575">
                      <font>
                         <Font size="22.0" />
                      </font>
@@ -108,7 +108,7 @@
       </VBox>
       <HBox layoutX="178.0" layoutY="470.0" prefHeight="58.0" prefWidth="364.0">
          <children>
-            <JFXButton fx:id="nSave" onAction="#newItemHandler" prefHeight="48.0" prefWidth="175.0" style="-fx-background-color: #B3E5FC;" text="Save" textFill="#757575">
+            <JFXButton fx:id="save" onAction="#onAction" prefHeight="48.0" prefWidth="175.0" style="-fx-background-color: #B3E5FC;" text="Save" textFill="#757575">
                <HBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </HBox.margin>
@@ -116,7 +116,7 @@
                   <Font size="22.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="nCancel" layoutX="10.0" layoutY="10.0" onAction="#newItemHandler" prefHeight="48.0" prefWidth="186.0" style="-fx-background-color: #B3E5FC;" text="Cancel" textFill="#757575">
+            <JFXButton fx:id="cancel" layoutX="10.0" layoutY="10.0" onAction="#onAction" prefHeight="48.0" prefWidth="186.0" style="-fx-background-color: #B3E5FC;" text="Cancel" textFill="#757575">
                <HBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </HBox.margin>

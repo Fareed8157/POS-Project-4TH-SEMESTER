@@ -15,18 +15,16 @@ import javafx.beans.property.StringProperty;
 public class Supplier {
     private SimpleStringProperty sid;
     private SimpleStringProperty name;
-    private SimpleStringProperty CompName;
-    private SimpleStringProperty addr;
+    private SimpleStringProperty lname;
     private SimpleStringProperty phno;
     private SimpleStringProperty email;
 
-    public Supplier(String sid, String name, String CompName, String addr, String phno, String email) {
+    public Supplier(String sid, String name, String lname, String email, String phno) {
         this.sid = new SimpleStringProperty(sid);
         this.name =new SimpleStringProperty( name);
-        this.CompName =new SimpleStringProperty( CompName);
-        this.addr =new SimpleStringProperty( addr);
-        this.phno =new SimpleStringProperty( phno);
+        this.lname =new SimpleStringProperty( lname);
         this.email =new SimpleStringProperty( email);
+        this.phno =new SimpleStringProperty( phno);
     }
 
     //sid getter and setter
@@ -54,32 +52,18 @@ public class Supplier {
     public StringProperty nameProperty(){
         return this.name;
     }
-    //company name getter and setter
-    
-    public String getCompName() {
-        return CompName.get();
-    }
-
-    public void setCompName(String CompName) {
-        this.CompName.set(CompName);
-    }
-    
-    public StringProperty compNameProperty(){
-        return this.CompName;
-    }
-    
     //address getter and setter
     
-    public String getAddr() {
-        return addr.get();
+    public String getLname() {
+        return lname.get();
     }
 
-    public void setAddr(String addr) {
-        this.addr.set(addr);
+    public void setLname(String lname) {
+        this.lname.set(lname);
     }
     
-     public StringProperty addrProperty(){
-        return this.addr;
+     public StringProperty lnameProperty(){
+        return this.lname;
     }
     //phone no getter and setter
      

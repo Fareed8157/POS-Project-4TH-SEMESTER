@@ -8,21 +8,21 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="612.0" prefWidth="1142.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ProductController">
    <children>
-      <TableView fx:id="proTable" layoutY="123.0" prefHeight="489.0" prefWidth="1142.0" style="-fx-background-color: #F5F5F5;">
+      <TableView fx:id="proTable" layoutY="123.0" prefHeight="489.0" prefWidth="939.0" style="-fx-background-color: #F5F5F5;">
         <columns>
-          <TableColumn fx:id="id" prefWidth="121.0" text="ID" />
-          <TableColumn fx:id="name" minWidth="0.0" prefWidth="173.0" text="Name" />
-            <TableColumn fx:id="desc" minWidth="0.0" prefWidth="180.0" text="Description" />
+          <TableColumn fx:id="id" prefWidth="95.0" text="ID" />
+          <TableColumn fx:id="name" minWidth="0.0" prefWidth="164.99996948242188" text="Name" />
+            <TableColumn fx:id="desc" minWidth="0.0" prefWidth="169.0" text="Description" />
             <TableColumn fx:id="unitPrice" minWidth="0.0" prefWidth="117.0" text="Unit Price" />
-            <TableColumn fx:id="stockIn" minWidth="0.0" prefWidth="117.0" text="Stock In" />
-            <TableColumn fx:id="stockOut" minWidth="0.0" prefWidth="117.0" text="Stock Out" />
-            <TableColumn fx:id="pCategory" minWidth="0.0" prefWidth="126.0" text="Category" />
-            <TableColumn fx:id="pic" minWidth="0.0" prefWidth="190.0" text="Picture" />
+            <TableColumn fx:id="stockIn" minWidth="0.0" prefWidth="123.0" text="Stock In" />
+            <TableColumn fx:id="stockOut" minWidth="0.0" prefWidth="136.0" text="Stock Out" />
+            <TableColumn fx:id="pCategory" minWidth="0.0" prefWidth="133.0" text="Category" />
         </columns>
       </TableView>
       <AnchorPane prefHeight="117.0" prefWidth="1142.0" style="-fx-background-color: #29B6F6;">
@@ -73,6 +73,16 @@
                </font>
             </JFXButton>
             <JFXButton fx:id="refresh" buttonType="RAISED" layoutX="626.0" layoutY="31.0" onAction="#onAction" prefHeight="65.0" prefWidth="93.0" style="-fx-background-color: #B3E5FC;" text="Refresh" textFill="#757575">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="938.0" layoutY="127.0" prefHeight="481.0" prefWidth="203.0">
+         <children>
+            <ImageView fx:id="imv" fitHeight="130.0" fitWidth="140.0" layoutX="39.0" layoutY="64.0" pickOnBounds="true" preserveRatio="true" />
+            <JFXButton fx:id="browse" buttonType="RAISED" layoutX="39.0" layoutY="203.0" onAction="#onAction" prefHeight="38.0" prefWidth="140.0" style="-fx-background-color: #B3E5FC;" text="Browse" textFill="#757575">
                <font>
                   <Font size="17.0" />
                </font>

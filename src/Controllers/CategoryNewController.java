@@ -169,7 +169,6 @@ public class CategoryNewController implements Initializable{
         Integer.valueOf(nid.getText().trim());
         String qu="INSERT INTO category VALUES(?,?,?,?)";
         if(!checkDuplicate(id,1) && !checkDuplicate(name,2)){
-            System.out.println("In if after check");
             PreparedStatement pst=dbCon.execQueryPrep(qu);
         try {
             pst.setInt(1, Integer.valueOf(nid.getText().trim()));
@@ -184,28 +183,12 @@ public class CategoryNewController implements Initializable{
         try {
             if(pst.executeUpdate()!=0){
                 FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/Category.fxml"));
-                
-                
+                Parent root=(Parent)loader.load();
                 CategoryController controller=loader.getController();
                 Category item=new Category(CategoryController.serialno++,Integer.valueOf(id),name,desc,im);
-                controller.list.add(item);
+                controller.insertData(item); //;add(item);
                 controller.refreshTable();
-                Parent root=(Parent)loader.load();
-                
-//                new Thread() {
-//                    @Override
-//                    public void run() {
-//                        controller.insertData(item);
-//                        controller.
-//                    };
-//                }.start();
-//                //controller.insertData(item);
-//                
-//                return true;
-//                //list.add(new Category(id,name,desc,new Image()))
-//            }
-            
-           
+                return true;
         } 
         }catch (SQLException | IOException ex) {
             System.out.println("In else after check");

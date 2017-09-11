@@ -230,7 +230,7 @@ public class CategoryController implements Initializable{
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        
+        dbCon=Configs.getInstance();
         updateItem.setDisable(true);
         deleteItem.setDisable(true);
         catTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -297,7 +297,7 @@ public class CategoryController implements Initializable{
        //catTable.setItems(list);
        //catTable.refresh();
         //get Database Connection 
-        dbCon=Configs.getInstance();
+        
         loadData();
         catTable.setEditable(true);
         
@@ -316,7 +316,7 @@ public class CategoryController implements Initializable{
     private void updateFilteredData() {
         filteredData.clear();
 
-        for (Category p : list) {
+        for(Category p : list) {
             if (matchesFilter(p)) {
                 filteredData.add(p);
             }
@@ -350,7 +350,6 @@ public class CategoryController implements Initializable{
      void loadData() {
         String qu="SELECT * FROM category";
         ResultSet rs=dbCon.execQuery(qu);
-        System.out.println("In Load Method Starting List=="+list.size()+"filteredData=="+filteredData.size());
         try {
             while(rs.next()){
                 Integer id=rs.getInt(1);
@@ -374,15 +373,11 @@ public class CategoryController implements Initializable{
         } catch (IOException ex) {
             Logger.getLogger(CategoryController.class.getName()).log(Level.SEVERE, null, ex);
         }
-         System.out.println("In Load Method List=="+list.size()+"filteredData=="+filteredData.size());
-        //catTable.setItems(list);
     }
      
      public void refreshTable(){
          list.clear();
          filteredData.clear();
-         System.out.println("In Refresh Method Starting List=="+list.size()+"filteredData=="+filteredData.size());
-         System.out.println(list.isEmpty()+" and "+filteredData.isEmpty());
          serialno=0;
          String qu="SELECT * FROM category";
         ResultSet rs=dbCon.execQuery(qu);
@@ -403,10 +398,6 @@ public class CategoryController implements Initializable{
                 Image im=new Image("file:photo.jpg",50,100,true,true);
                 int i=0;
                 list.add(new Category(serialno++,id,name,desc,im));
-                System.out.println("In Refresh Method inside loop1 List=="+list.size()+"filteredData=="+filteredData.size());
-                //filteredData.add(new Category(serialno++,id,name,desc,im));
-                System.out.println("In Refresh Method inside loop2 List=="+list.size()+"filteredData=="+filteredData.size());
-                System.out.println();
                 catTable.setItems(filteredData) ;
             }
         } catch (SQLException ex) {
@@ -415,7 +406,6 @@ public class CategoryController implements Initializable{
         } catch (IOException ex) {
             Logger.getLogger(CategoryController.class.getName()).log(Level.SEVERE, null, ex);
         }
-         System.out.println("In Refresh Method List=="+list.size()+"filteredData=="+filteredData.size());
      }
 
     
