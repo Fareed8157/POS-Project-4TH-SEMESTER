@@ -68,22 +68,22 @@
                               <Font size="14.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton fx:id="discount" layoutX="12.0" layoutY="88.0" onAction="#onAction" prefHeight="58.0" prefWidth="103.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #0277BD;" text="Discount" textFill="#757575">
+                        <JFXButton fx:id="reprintInvoice" layoutX="131.0" layoutY="88.0" onAction="#onAction" prefHeight="58.0" prefWidth="104.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #0277BD;" text="RePrint Invc" textFill="#757575">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton fx:id="pay" layoutX="131.0" layoutY="88.0" onAction="#onAction" prefHeight="58.0" prefWidth="104.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #0277BD;" text="Pay" textFill="#757575">
+                        <JFXButton fx:id="closeButton" layoutX="14.0" layoutY="89.0" onAction="#onAction" prefHeight="57.0" prefWidth="102.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #0277BD;" text="Close" textFill="#757575">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton fx:id="closeButton" layoutX="11.0" layoutY="160.0" onAction="#onAction" prefHeight="32.0" prefWidth="223.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #0277BD;" text="Close" textFill="#757575">
+                        <JFXButton fx:id="deletItem" layoutX="132.0" layoutY="14.0" onAction="#onAction" prefHeight="58.0" prefWidth="103.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #0277BD;" text="Delete Item" textFill="#757575">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton fx:id="deletItem" layoutX="132.0" layoutY="14.0" onAction="#onAction" prefHeight="58.0" prefWidth="103.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #0277BD;" text="Delete" textFill="#757575">
+                        <JFXButton fx:id="clear" layoutX="13.0" layoutY="158.0" onAction="#onAction" prefHeight="44.0" prefWidth="222.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #0277BD;" text="New Transaction" textFill="#757575">
                            <font>
                               <Font size="14.0" />
                            </font>

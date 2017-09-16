@@ -48,6 +48,8 @@ public class Configs {
         }
         
     }
+   
+    
     public PreparedStatement execQueryPrep(String query){
         try {
             

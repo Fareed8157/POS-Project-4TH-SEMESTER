@@ -26,7 +26,7 @@
                      <columns>
                         <TableColumn fx:id="sId" prefWidth="96.0" text="ID" />
                         <TableColumn fx:id="sFname" prefWidth="182.99996948242188" text="First Name" />
-                        <TableColumn fx:id="sLname" prefWidth="162.0" text="Last Name" />
+                        <TableColumn fx:id="sLname" prefWidth="162.0" text="Company Name" />
                         <TableColumn fx:id="sEmail" prefWidth="266.0" text="Email" />
                         <TableColumn fx:id="sPhno" prefWidth="202.0" text="Phone No" />
                      </columns>

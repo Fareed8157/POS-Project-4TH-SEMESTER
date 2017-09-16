@@ -411,7 +411,7 @@ public class CategoryController implements Initializable{
     
     private void removeRecords(ObservableList<Category> record) {
         for(Category id : record){
-            String qu="DELETE FROM category where CategoryId="+id;
+            String qu="DELETE FROM category where CategoryId="+id.getId();
         if(dbCon.execAction(qu)){
             refreshTable();
             serialno--;

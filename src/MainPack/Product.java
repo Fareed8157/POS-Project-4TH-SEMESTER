@@ -18,28 +18,37 @@ import javafx.scene.image.ImageView;
  * @author Fareed
  */
 public class Product {
-    private final SimpleStringProperty barCode;
-    private final SimpleStringProperty name;
-    private final SimpleStringProperty desc;
-    private final SimpleStringProperty selling;
-    private final SimpleStringProperty unitPrice;
-    private final SimpleStringProperty stockOut;
-    private final SimpleObjectProperty<ProductTracking> pt;
-    private final SimpleObjectProperty<Supplier> supp;
-    private final SimpleObjectProperty<Date> stockInDate;
-    private final SimpleObjectProperty<ImageView> imv;
+    private  SimpleStringProperty barCode;
+    private  SimpleStringProperty name;
+    private  SimpleStringProperty desc;
+    private  SimpleStringProperty selling;
+    private  SimpleStringProperty unitPrice;
+    private  SimpleStringProperty stkIn;
+    private  SimpleStringProperty stockOut;
+    public  SimpleObjectProperty<Image> imv;
+    private  SimpleObjectProperty<Category> ct;
+    private  SimpleStringProperty supp;
+    private  SimpleStringProperty imPath;
+    //private final SimpleObjectProperty<ProductTracking> pt;
+    //private final SimpleObjectProperty<Supplier> supp;
+    
+    //private  SimpleObjectProperty<Date> stockInDate;
+    
 
-    public Product(String barCode, String name, String desc, String selling, String unitPrice, String stockOut, ProductTracking pt, Supplier supp, Image imv,Date stockInDate) {
+    public Product(String barCode, String name, String desc, String unitPrice,String stkIn, String stockOut,Image imv,Category ct, String supp) {
         this.barCode = new SimpleStringProperty(barCode);
         this.name =new SimpleStringProperty( name);
         this.desc =new SimpleStringProperty( desc);
-        this.selling =new SimpleStringProperty( selling);
         this.unitPrice =new SimpleStringProperty( unitPrice);
         this.stockOut =new SimpleStringProperty( stockOut);
-        this.pt=new SimpleObjectProperty(pt);
-        this.supp =new SimpleObjectProperty( supp);
+        this.stkIn =new SimpleStringProperty( stkIn);
         this.imv =new SimpleObjectProperty(imv);
-        this.stockInDate=new SimpleObjectProperty(stockInDate);
+         this.ct =new SimpleObjectProperty(ct);
+         this.supp =new SimpleStringProperty( supp);
+         
+        //this.selling =new SimpleStringProperty( selling);
+        //this.pt=new SimpleObjectProperty(pt);
+        //this.stockInDate=new SimpleObjectProperty(stockInDate);
     }
     //bar code getter setter
     public String getBarCode(){
@@ -74,18 +83,6 @@ public class Product {
         return this.desc;
     }
     
-    //selling getter and Setter
-    
-    public String getSelling(){
-        return this.selling.get();
-    }
-    public void setSelling(String selling){
-        this.selling.set(selling);
-    }
-    public StringProperty sellingProperty(){
-        return this.selling;
-    }
-    
     //Unit price getter and setter
     
     public String getUnitPrice(){
@@ -110,51 +107,96 @@ public class Product {
         return this.stockOut;
     }
     
-    //product Tracking getter and Setter
+  
+    //stockIn getter and Setter
     
-    public ProductTracking getPt(){
-        return this.pt.get();
+    public String getStkIn(){
+        return this.stkIn.get();
     }
-    public void setPt(ProductTracking pt){
-        this.pt.set(pt);
+    public void setStkIn(String stkIn){
+        this.stkIn.set(stkIn);
     }
-    public ObjectProperty<ProductTracking> ptProperty(){
-        return this.pt;
-    }
-    
-    //Supplier getter and setter
-    
-    public Supplier getSupp(){
-        return this.supp.get();
-    }
-    public void setSupp(Supplier supp){
-        this.supp.set(supp);
-    }
-    public ObjectProperty<Supplier> suppProperty(){
-        return this.supp;
+    public StringProperty stkInProperty(){
+        return this.stkIn;
     }
     
     //image getter and Setter
-    public ImageView getImv(){
+    public Image getImv(){
         return this.imv.get();
     }
-    public void setImv(ImageView imv){
+    public void setImv(Image imv){
         this.imv.set(imv);
     }
-    public ObjectProperty<ImageView> imvProperty(){
+    public ObjectProperty<Image> imvProperty(){
         return this.imv;
     }
     
+    //category getter and setter
+    public Category getCt(){
+        return this.ct.get();
+    }
+    public void setCt(Category ct){
+        this.ct.set(ct);
+    }
+    public ObjectProperty<Category> ctProperty(){
+        return this.ct;
+    }
+    
+    
+    //supplier getter and setter;
+    public String getSupp(){
+        return this.supp.get();
+    }
+    public void setSupp(String supp){
+        this.supp.set(supp);
+    }
+    public SimpleStringProperty suppProperty(){
+        return this.supp;
+    }
+    
+    
+    
+    //selling getter and Setter
+//    
+//    public String getSelling(){
+//        return this.selling.get();
+//    }
+//    public void setSelling(String selling){
+//        this.selling.set(selling);
+//    }
+//    public StringProperty sellingProperty(){
+//        return this.selling;
+//    }
+//    
+    
+    //product Tracking getter and Setter
+    
+//    public ProductTracking getPt(){
+//        return this.pt.get();
+//    }
+//    public void setPt(ProductTracking pt){
+//        this.pt.set(pt);
+//    }
+//    public ObjectProperty<ProductTracking> ptProperty(){
+//        return this.pt;
+//    }
+    
+    //Supplier getter and setter
+    
+    
+    
+    
+    
     //date setter and getter
     
-    public Date getStockInDate(){
-        return this.stockInDate.get();
-    }
-    public void setStockInDate(Date imv){
-        this.stockInDate.set(imv);
-    }
-    public ObjectProperty<Date> stockInDateProperty(){
-        return this.stockInDate;
-    }
+//    public Date getStockInDate(){
+//        return this.stockInDate.get();
+//    }
+//    public void setStockInDate(Date imv){
+//        this.stockInDate.set(imv);
+//    }
+//    public ObjectProperty<Date> stockInDateProperty(){
+//        return this.stockInDate;
+//    }
     
 }

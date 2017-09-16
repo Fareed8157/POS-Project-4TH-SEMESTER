@@ -20,7 +20,7 @@
          </font>
       </Label>
       <MaterialDesignIconView fx:id="close" fill="#5b4040" glyphName="CLOSE" layoutX="675.0" layoutY="40.0" onMouseClicked="#closeStage" size="30.0" />
-      <VBox layoutX="25.0" layoutY="103.0" prefHeight="349.0" prefWidth="308.0">
+      <VBox layoutX="24.0" layoutY="115.0" prefHeight="345.0" prefWidth="308.0">
          <children>
             <JFXTextField fx:id="barcode" focusColor="#546e7a" labelFloat="true" prefHeight="34.0" prefWidth="284.0" promptText="Bar Code" unFocusColor="#b3e5fc">
                <font>
@@ -53,7 +53,7 @@
             </JFXComboBox>
          </children>
       </VBox>
-      <VBox layoutX="388.0" layoutY="39.0" prefHeight="413.0" prefWidth="308.0">
+      <VBox layoutX="388.0" layoutY="49.0" prefHeight="413.0" prefWidth="308.0">
          <children>
             <JFXTextField fx:id="stockIn" focusColor="#546e7a" labelFloat="true" prefHeight="27.0" prefWidth="288.0" promptText="Stock In" unFocusColor="#b3e5fc">
                <font>
@@ -83,7 +83,7 @@
             </JFXTextField>
             <HBox prefHeight="48.0" prefWidth="297.0">
                <children>
-                  <JFXTextField fx:id="picField" focusColor="#546e7a" labelFloat="true" prefHeight="52.0" prefWidth="194.0" promptText="Stock In" unFocusColor="#b3e5fc">
+                  <JFXTextField fx:id="picField" focusColor="#546e7a" labelFloat="true" prefHeight="38.0" prefWidth="195.0" promptText="URL" unFocusColor="#b3e5fc">
                      <font>
                         <Font size="17.0" />
                      </font>

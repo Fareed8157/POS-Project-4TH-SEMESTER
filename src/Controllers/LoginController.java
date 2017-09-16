@@ -24,10 +24,12 @@ import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import DBConnection.*;
+import MainPack.User;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -35,6 +37,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 /**
  *
  * @author Fareed
@@ -78,6 +82,7 @@ public class LoginController implements Initializable{
         Stage stage=(Stage)closeIcon.getScene().getWindow();
         stage.close();
     }
+    ObservableList<User> userList=FXCollections.observableArrayList();
     Configs dbCon=null;
     DateFormat dateFormat;
     Date date;
@@ -157,12 +162,16 @@ public class LoginController implements Initializable{
     }
 
     private boolean loginFun() {
+        userList.clear();
         String id=empNo.getText();
         String pass=upass.getText();
         String qu="SELECT * FROM user WHERE uId="+id+" AND uPass="+"'"+pass+"'";
         ResultSet rs=dbCon.execQuery(qu);
         try {
             if(rs.next()){
+                User user=new User(rs.getInt("uId"),rs.getString("uName"),rs.getString("uPass"));
+                saveIntoFile(user);
+                userList.add(user);
                 String dateTime=dateFormat.format(date);
                 qu="insert into trackuser values('"+dateTime+"',"+id+")";
                 dbCon.execAction(qu);
@@ -176,6 +185,47 @@ public class LoginController implements Initializable{
         }
         
         
+    }
+
+    private void saveIntoFile(User user) {
+         String FILENAME="G:\\UserDetails.txt";
+        String name=user.getUname();
+        String pas=user.getPass();
+        Integer id=user.getId();
+        String content = id+"/"+name+"/"+pas;
+//        BufferedWriter bw = null;
+//        FileWriter fw = null;
+//        System.out.println(user.getId()+"="+user.getPass());
+//       String content = id+"/"+name+"/"+pas;
+//       String[] ar=content.split("/");
+//       
+//       try {
+//        fw = new FileWriter(FILENAME);
+//        bw = new BufferedWriter(fw);
+//        bw.write(content);
+////        for(String data: ar){
+////        bw.write(data);  
+////        bw.newLine();
+////        }//end of loop
+//        } catch (IOException ex) {
+//            System.out.println(ex.toString());
+//        }
+    BufferedWriter f = null;
+        try {
+            f = new BufferedWriter(new FileWriter("G:\\UserDetails.txt"));
+            f.write(content);
+        }
+        catch(IOException e) {
+            System.out.println(e);
+        }
+        finally {
+            if (f != null)
+                try {
+                    f.close();
+            } catch (IOException ex) {
+                    System.out.println(ex.toString());
+            }  
+        }
     }
     
 }

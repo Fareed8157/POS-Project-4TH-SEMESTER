@@ -24,7 +24,18 @@ public class Category extends RecursiveTreeObject<Category>{
     private  SimpleStringProperty desc;
     private  ImageView imv;
     private  Image im;
-
+    public Category(){
+        
+    }
+    public Category(Integer id){
+        this.id = new SimpleIntegerProperty(id);
+    }
+    
+    public Category(Integer id,String name){
+        this.id = new SimpleIntegerProperty(id);
+        this.name = new SimpleStringProperty(name);
+    }
+    
     public Category(Integer serialNo,Integer id, String name, String desc, Image imv) {
         this.serialNo=new SimpleIntegerProperty(serialNo);
         this.id = new SimpleIntegerProperty(id);

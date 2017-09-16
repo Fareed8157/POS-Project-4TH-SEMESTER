@@ -6,6 +6,9 @@
 package Controllers;
 
 import DBConnection.Configs;
+import MainPack.Category;
+import MainPack.Product;
+import MainPack.ProductTracking;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
@@ -15,11 +18,16 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,8 +35,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -44,7 +55,7 @@ public class ProductNewController implements Initializable{
 
     @FXML
     private JFXTextField barcode;
-
+    
     @FXML
     private JFXTextField name;
 
@@ -80,8 +91,10 @@ public class ProductNewController implements Initializable{
 
      @FXML
     private MaterialDesignIconView close;
+     ObservableList<Product> plist=FXCollections.observableArrayList();
      ObservableList categoryList=FXCollections.observableArrayList();
-    
+     ObservableList<ProductTracking> inventory=FXCollections.observableArrayList();
+     ObservableList supplierList=FXCollections.observableArrayList();
     private FileInputStream is=null;
     private ImageView imv=null;
     private Image im=null;
@@ -90,7 +103,10 @@ public class ProductNewController implements Initializable{
     private Desktop desktop=Desktop.getDesktop();
     
     Configs con;
-
+    static boolean flag;
+    public boolean getStatus(){
+       return flag; 
+    }
     @FXML
     void closeStage(MouseEvent event) {
         Stage st=(Stage)close.getScene().getWindow();
@@ -100,8 +116,13 @@ public class ProductNewController implements Initializable{
     @FXML
     void onAction(ActionEvent event) throws FileNotFoundException {
         if(event.getSource()==save){
-            saveData();            //laoding data into database
-        }
+               flag=saveData();            //laoding data into database
+               System.out.println("flag=="+flag);
+         if(flag){
+             infoMessage("Saved Successfully");
+             clearFields();
+            } 
+         }
         else if(event.getSource()==browse){
             chooseFile=new FileChooser();
             chooseFile.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files","*.jpg","*.png","*.gif"));
@@ -114,6 +135,10 @@ public class ProductNewController implements Initializable{
             picField.setText(file.getAbsolutePath());
       }
         }
+        else if(event.getSource()==cancel){
+            Stage win=(Stage)cancel.getScene().getWindow();
+            win.close();
+        }
     }
 
     
@@ -121,49 +146,100 @@ public class ProductNewController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         con=Configs.getInstance();
         loadCategory();
-        category.setOnAction(e->System.out.println(category.getValue()));
+        loadSupplier();
+        stkInDate.setStyle("-fx-font-size:20");
         category.getItems().addAll(categoryList);
-        
-        
-    }
+        suppChose.getItems().addAll(supplierList);
+   }
 
-    private void saveData() {
+    private boolean saveData() {
+        boolean flag1=false;
+        FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/Product.fxml"));
+        try {
+            Parent root=loader.load();
+        } catch (IOException ex) {
+            Logger.getLogger(ProductNewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ProductController puc=(ProductController)loader.getController();
+        
+      //  boolean flag1;
         if(!isFieldEmpty()){
             String bcode=barcode.getText();
             String pname=name.getText();
-            String pr=uPrice.getText();
-            String ps=suppChose.getValue().toString();
-            String stkin=stockIn.getText();
-            String stkDate=stkInDate.getValue().toString();
-            String ctg=category.getValue().toString();
             String des=desc.getText();
+            String upr=uPrice.getText();
+            String stkOut="";
             String picF=picField.getText();
+            Integer cno=findId(category.getValue());
+            Category ctg=new Category(cno);
+            String date=((JFXTextField)stkInDate.getEditor()).getText();
+            Date today = new Date(date);
+            SimpleDateFormat tsdf = new SimpleDateFormat("yyyy-MM-dd");
+            try{
+                System.out.println(tsdf.format(today));
+            }
+            catch (Exception e){
+                System.out.println("Error occurred" + e.getMessage());
+            }
+            //String ctg=category.getValue().toString();
+            String sc=suppChose.getValue().toString();
+            String stkin=stockIn.getText();                     //product tracking data
+            String stkDate=stkInDate.getValue().toString();    //product tracking data
+            System.out.println("before  execute");
             if(!checkDuplicate(bcode)){
-                String qu="INSERT INTO products VALUES(?,?,?,?,?,?,?,?,?)";
+                System.out.println("Inside if execute");
+                //String qu="INSERT INTO products VALUES(?,?,?,?,?,?,?,?)";
+                String qu="INSERT INTO products VALUES(?,?,?,?,?,?,"+"("+"Select CategoryID From category where CategoryName='"+category.getValue().toString()+"')"+",?)";
                 PreparedStatement pst=con.execQueryPrep(qu);
+                System.out.println("After prepared");
                 try {
                 pst.setString(1,bcode);
                 pst.setString(2, pname);
-                pst.setString(3, pr);
-                pst.setString(4,ps);
-                pst.setString(5, stkin);
-                pst.setString(6, stkDate);
-                pst.setString(7,ctg);
-                pst.setString(8, des);
-                pst.setBinaryStream(9, (InputStream)is, (int)file.length());
+                pst.setString(3, des);
+                pst.setString(4,upr);
+                //pst.setNull(5, 0);
+                pst.setString(5, "0");
+                pst.setBinaryStream(6, (InputStream)is, (int)file.length());
+                //pst.setString(7,ctg.getId().toString());
+                pst.setString(7,sc);
+                Product pro=new Product(bcode,pname,des,upr,stkin,stkOut,im,ctg,sc);
+                
+                System.out.println("After execute only");
+                if(pst.executeUpdate()!=0){
+                    System.out.println("After execute");
+                    plist.add(pro);
+                    //inserting to inventory
+                    qu="INSERT INTO inventory VALUES(?,?,?)";
+                    pst=con.execQueryPrep(qu);
+                    pst.setString(1, stkin);
+                    pst.setString(2, bcode);
+                    pst.setString(3, tsdf.format(today));
+                    if(pst.execute()){
+                        inventory.add(new ProductTracking(stkin,bcode,today));
+                    }
+                    pst.close();
+                    puc.getList().add(pro);         //add product to the table
+                    puc.refreshTable();
+                    return true;
+                }
+                pst.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(ProductNewController.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println(ex.toString());
                 }
             }
-            else
-                errorMessage("Duplicate Values");
+            else{
+               errorMessage("Duplicate Bar code"); 
+                return false;
+            }
+               
             
         }
-        
+            System.out.println("at the end of execute");
+        return false;
     }
 
     private boolean checkDuplicate(String id) {
-        String qu="SELECT * FROM products WHERE BarCode="+Integer.valueOf(id);
+        String qu="SELECT * FROM products WHERE BarCode="+id;
         try {
             ResultSet rs=con.execQuery(qu);
             if(rs.next())
@@ -176,6 +252,18 @@ public class ProductNewController implements Initializable{
         }
     }
 
+    private void loadSupplier() {
+        String qu="SELECT SupplierID FROM supplier";
+        ResultSet rs=con.execQuery(qu);
+        try {
+            while(rs.next()){
+                supplierList.add(rs.getString("SupplierID"));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+        }
+    }
+    
     private void loadCategory() {
         String qu="SELECT CategoryName FROM category";
         ResultSet rs=con.execQuery(qu);
@@ -184,7 +272,7 @@ public class ProductNewController implements Initializable{
                 categoryList.add(rs.getString("CategoryName"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ProductNewController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.toString());
         }
     }
     
@@ -192,7 +280,14 @@ public class ProductNewController implements Initializable{
         if(barcode.getText().isEmpty() || name.getText().isEmpty() || uPrice.getText().isEmpty() || suppChose.getValue().isEmpty()
           || stockIn.getText().isEmpty() || stkInDate.getValue().toString().isEmpty() || category.getValue().isEmpty() ||
           desc.getText().isEmpty() || picField.getText().isEmpty()) {
-           return true;
+           errorMessage("Fill All Field");
+            return true;
+        }
+         if(suppChose.getSelectionModel().isEmpty() || category.getSelectionModel().isEmpty()){
+         errorMessage("Select Value in Choice Box");
+         suppChose.requestFocus();
+         category.requestFocus();
+         return true;
         }
     return false;
     }
@@ -210,6 +305,31 @@ public class ProductNewController implements Initializable{
             a1.setContentText(message);
             a1.setHeaderText(null);
             a1.showAndWait();
+    }
+
+    private Integer findId(String valueOf) {
+        String query="SELECT CategoryID FROM category WHERE CategoryName='"+valueOf+"';";
+        ResultSet rs=con.execQuery(query);
+        try {
+            if(rs.next()){
+                return rs.getInt("CategoryID");
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+        }
+        return 0;
+    }
+
+    public void clearFields(){
+        barcode.clear();
+        name.clear();
+        uPrice.clear();
+        suppChose.setValue(null);
+        stockIn.clear();
+        stkInDate.setValue(null);
+        category.setValue(null);
+        desc.clear();
+        picField.clear();
     }
 
     
