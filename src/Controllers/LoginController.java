@@ -28,6 +28,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import DBConnection.*;
 import MainPack.User;
+import com.jfoenix.controls.JFXComboBox;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.sql.ResultSet;
@@ -39,6 +40,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 /**
  *
  * @author Fareed
@@ -50,7 +53,9 @@ public class LoginController implements Initializable{
     private AnchorPane rootNode;
 
     @FXML
-    private JFXTextField empNo;
+    private JFXComboBox<String> empNo;
+//    @FXML
+//    private JFXTextField empNo;
 
     @FXML
     private JFXPasswordField upass;
@@ -83,6 +88,7 @@ public class LoginController implements Initializable{
         stage.close();
     }
     ObservableList<User> userList=FXCollections.observableArrayList();
+    ObservableList<String> empNoList=FXCollections.observableArrayList();
     Configs dbCon=null;
     DateFormat dateFormat;
     Date date;
@@ -128,6 +134,10 @@ public class LoginController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         dbCon=Configs.getInstance();
+        loadEmpNo();
+        empNo.setPromptText("Choose Employee ID");
+        empNo.getItems().addAll(empNoList);
+        
         login.setDisable(true);
         progress.setVisible(false);
         empNo.setStyle("-fx-text-inner-color: #ffffff;");
@@ -156,14 +166,27 @@ public class LoginController implements Initializable{
             }
     });
     empNo.setOnAction(actionEvent->{
-        System.out.println(actionEvent.getEventType().getName().toString());
+        empNo.setStyle("-fx-text-fill: -fx-text-inner-color");
+        System.out.println(actionEvent.getEventType().getName());
     });
     
     }
 
+    private void loadEmpNo()  {
+        empNoList.clear();
+        String qu="SELECT uId FROM user";
+        ResultSet rs=dbCon.execQuery(qu);
+        try {
+            while(rs.next()){
+                empNoList.add(rs.getString("uId"));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+        }
+    }
     private boolean loginFun() {
         userList.clear();
-        String id=empNo.getText();
+        String id=empNo.getValue();
         String pass=upass.getText();
         String qu="SELECT * FROM user WHERE uId="+id+" AND uPass="+"'"+pass+"'";
         ResultSet rs=dbCon.execQuery(qu);

@@ -33,7 +33,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import MainPack.Category;
 import com.jfoenix.validation.RequiredFieldValidator;
-import com.mysql.cj.x.protobuf.Mysqlx.Error.Severity;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Control;
 import javax.xml.bind.Validator;

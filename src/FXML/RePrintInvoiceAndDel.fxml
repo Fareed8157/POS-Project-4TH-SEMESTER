@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="461.0" prefWidth="422.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111" fx:controller="Controllers.RePrintInvoiceAndDelController">
+   <children>
+      <Label layoutX="117.0" layoutY="34.0" text="Invoice Operation">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <JFXComboBox fx:id="delOrPrint" focusColor="#546e7a" labelFloat="true" layoutX="74.0" layoutY="108.0" prefHeight="35.0" prefWidth="275.0" promptText="Select" unFocusColor="#b3e5fc" />
+      <JFXTextField fx:id="invNo" focusColor="#546e7a" labelFloat="true" layoutX="74.0" layoutY="206.0" prefHeight="35.0" prefWidth="275.0" promptText="Enter Invoice No" unFocusColor="#b3e5fc">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="bcode" focusColor="#546e7a" labelFloat="true" layoutX="74.0" layoutY="297.0" prefHeight="35.0" prefWidth="275.0" promptText="Barcode" unFocusColor="#b3e5fc">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </JFXTextField>
+      <JFXButton fx:id="delOrPrintButton" buttonType="RAISED" layoutX="76.0" layoutY="379.0" onAction="#onAction" prefHeight="36.0" prefWidth="275.0" style="-fx-background-color: #b3e5fc;" text="Click" />
+   </children>
+</AnchorPane>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
@@ -19,12 +20,7 @@
                <children>
                   <AnchorPane layoutX="6.0" layoutY="80.0" prefHeight="200.0" prefWidth="242.0" style="-fx-background-color: #42A5F5; -fx-border-color: #ffffff;" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="5.0">
                      <children>
-                        <Label layoutX="6.0" layoutY="65.0" prefHeight="22.0" prefWidth="84.0" text="Sub Total" textFill="#212121">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="6.0" layoutY="110.0" prefHeight="22.0" prefWidth="84.0" text="Tax" textFill="#212121">
+                        <Label layoutX="6.0" layoutY="87.0" prefHeight="22.0" prefWidth="84.0" text="Sub Total" textFill="#212121">
                            <font>
                               <Font size="16.0" />
                            </font>
@@ -34,12 +30,7 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="subTotalLabel" layoutX="155.0" layoutY="63.0" prefHeight="30.0" prefWidth="77.0" style="-fx-border-color: #ffffff;" text="label" textFill="#212121">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="taxLabel" layoutX="155.0" layoutY="108.0" prefHeight="30.0" prefWidth="77.0" style="-fx-border-color: #ffffff;" text="label" textFill="#212121">
+                        <Label fx:id="subTotalLabel" layoutX="155.0" layoutY="85.0" prefHeight="30.0" prefWidth="77.0" style="-fx-border-color: #ffffff;" text="label" textFill="#212121">
                            <font>
                               <Font size="16.0" />
                            </font>
@@ -68,7 +59,7 @@
                               <Font size="14.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton fx:id="reprintInvoice" layoutX="131.0" layoutY="88.0" onAction="#onAction" prefHeight="58.0" prefWidth="104.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #0277BD;" text="RePrint Invc" textFill="#757575">
+                        <JFXButton fx:id="reprintInvoice" layoutX="131.0" layoutY="88.0" onAction="#onAction" prefHeight="58.0" prefWidth="104.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #0277BD;" text="Invoice Op" textFill="#757575">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -132,18 +123,14 @@
          <top>
             <AnchorPane prefHeight="102.0" prefWidth="953.0" style="-fx-background-color: #29B6F6;" BorderPane.alignment="CENTER">
                <children>
-                  <JFXTextField fx:id="search" layoutX="307.0" layoutY="49.0" prefHeight="39.0" prefWidth="411.0" AnchorPane.leftAnchor="307.0" AnchorPane.rightAnchor="265.0">
+                  <JFXTextField fx:id="search" focusColor="#eeeeee" labelFloat="true" layoutX="307.0" layoutY="49.0" prefHeight="39.0" prefWidth="411.0" promptText="Barcode" unFocusColor="#6f6d6d" AnchorPane.leftAnchor="307.0" AnchorPane.rightAnchor="265.0">
                      <font>
                         <Font size="21.0" />
                      </font>
                   </JFXTextField>
                   <FontAwesomeIconView fill="#eeecec" glyphName="SEARCH" layoutX="699.0" layoutY="75.0" size="20.0" text="" AnchorPane.rightAnchor="265.4285717010498" AnchorPane.topAnchor="57.85714340209961" />
                   <FontAwesomeIconView fx:id="close" fill="#f5f5f5" glyphName="CLOSE" layoutX="935.0" layoutY="34.0" onMouseClicked="#closeStage" size="30.0" AnchorPane.rightAnchor="24.428571701049805" />
-                  <Label layoutX="307.0" layoutY="24.0" prefHeight="25.0" prefWidth="56.0" text="Search" textFill="#212121">
-                     <font>
-                        <Font size="19.0" />
-                     </font>
-                  </Label>
+                  <JFXComboBox fx:id="chooseType" focusColor="#eeeeee" labelFloat="true" layoutX="31.0" layoutY="52.0" prefHeight="32.0" prefWidth="161.0" promptText="Choose Type" unFocusColor="#6f6d6d" />
                </children></AnchorPane>
          </top>
       </BorderPane>

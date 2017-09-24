@@ -21,7 +21,7 @@ public class Sale {
     private  SimpleIntegerProperty unitPrice;
     private  SimpleStringProperty qt;
 
-    public Sale(String barCode, String name, String desc, Integer unitPrice,String qt) {
+    public Sale(String barCode, String name, String desc,String qt,Integer unitPrice) {
         this.barCode = new SimpleStringProperty(barCode);
         this.name =new SimpleStringProperty( name);
         this.desc =new SimpleStringProperty( desc);

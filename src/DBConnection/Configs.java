@@ -23,7 +23,10 @@ public class Configs {
     private final String url="";
     private static Statement stmt=null;
     private static Configs handler;
-    private Connection con=null;
+    public static Connection con=null;
+    public static Connection getConnection(){
+        return con;
+    }
     private Configs(){
         createConnection();
     }
@@ -35,17 +38,16 @@ public class Configs {
     }
     void createConnection(){
         try {       
-            con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb","root","mysql");
+            Class.forName("com.mysql.jdbc.Driver");       
+        con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb","root","mysql");
             if(con!=null)
                 System.out.println("Connected");
         } catch (SQLException ex) {
             System.out.println(ex.toString());
-        }
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
-            System.out.println(ex.toString());
+            Logger.getLogger(Configs.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //Class.forName("com.mysql.jdbc.Driver");
         
     }
    

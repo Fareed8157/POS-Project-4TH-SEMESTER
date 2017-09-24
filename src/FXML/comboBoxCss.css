@@ -1,0 +1,10 @@
+.combo-box .cell{
+    -fx-text-fill: black;
+    -fx-font: 16px "Arial";
+}
+.my-list-cell {
+    -fx-text-fill: black;
+    -fx-font: 16px "Arial";
+    /* No alternate highlighting */
+    -fx-background-color: white;
+}
