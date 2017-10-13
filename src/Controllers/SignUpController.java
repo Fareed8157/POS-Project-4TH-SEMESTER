@@ -31,6 +31,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Alert;
 /**
@@ -167,10 +169,14 @@ public class SignUpController implements Initializable{
         String efrnd=eFrnd.getText();
         String ecnic=eCnic.getText();
         //check for empty
-        if(empId.isEmpty()||empName.isEmpty()||empPass.isEmpty()||eLoc.isEmpty()||gender.isEmpty()||eph.isEmpty()||efrnd.isEmpty()||ecnic.isEmpty())
-           errorMessage("Please Enter in All Fields");
-        
+        if(empId.isEmpty()||empName.isEmpty()||empPass.isEmpty()||eLoc.isEmpty()||gender.isEmpty()||eph.isEmpty()||efrnd.isEmpty()||ecnic.isEmpty()){
+           errorMessage("Please Enter in All Fields"); 
+        }
+           
+        else{
         //query
+        if(idValidation() & numberValidation() & cnicValidation() & bFrndNameValidation() & eNameValidation()
+               & elocValidation() & passValidation() ){
         String qu="INSERT INTO user VALUES ("+
                 empId+","+
                 "'"+empName+"',"+
@@ -188,7 +194,11 @@ public class SignUpController implements Initializable{
         else{
             errorMessage("Failed");
             return false;
-        }
+            }    
+        }    
+        }//end of inner if
+        
+        return false;
     }
 
     private boolean checkForDuplicateId(String newValue) {
@@ -220,4 +230,106 @@ public class SignUpController implements Initializable{
             a1.setHeaderText(null);
             a1.showAndWait();
     }
+    private boolean idValidation(){
+        Pattern p=Pattern.compile("[0-9]+");
+        Matcher m=p.matcher(eId.getText());
+        if(m.find() && m.group().equals(eId.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate ID");
+            a1.setContentText("Please Enter Valid ID");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+
+    private boolean numberValidation() {
+        Pattern p=Pattern.compile("(0|92)?[3-4][0-9]{9}");
+        Matcher m=p.matcher(ePhone.getText());
+        if(m.find() && m.group().equals(ePhone.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Number");
+            a1.setContentText("Please Enter Valid Number");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+
+    
+    private boolean cnicValidation() {
+        Pattern p=Pattern.compile("[0-9]+");
+        Matcher m=p.matcher(eCnic.getText());
+        if(m.find() && m.group().equals(eCnic.getText()))          
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Cnic");
+            a1.setContentText("Please Enter Valid Cnic");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean bFrndNameValidation() {
+        Pattern p=Pattern.compile("[a-zA-Z]+");
+        Matcher m=p.matcher(eFrnd.getText());
+        if(m.find() && m.group().equals(eFrnd.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Best Friend Name");
+            a1.setContentText("Please Enter Valid Best Friend");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean eNameValidation() {
+        Pattern p=Pattern.compile("[a-zA-Z]+");
+        Matcher m=p.matcher(ename.getText());
+        if(m.find() && m.group().equals(ename.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Employee Name");
+            a1.setContentText("Please Enter Valid Employee Name");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean elocValidation() {
+       Pattern p=Pattern.compile("^\\p{L}+[\\p{L}\\p{Z}\\p{P}]{0,}");
+        Matcher m=p.matcher(eloc.getText());
+        if(m.find() && m.group().equals(eloc.getText()))
+            return true;     
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Location");
+            a1.setContentText("Please Enter Valid Location");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    public boolean passValidation(){
+        Pattern p=Pattern.compile("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,15})");
+        Matcher m=p.matcher(ePass.getText());
+        if(m.find() && m.group().equals(ePass.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Password");
+            a1.setContentText("Password must contain at least on(Digit,LowerCase,UpperCase and Special Characters ) and Length Must be between 6-15");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    
 }

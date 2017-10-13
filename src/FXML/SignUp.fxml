@@ -16,25 +16,25 @@
    <children>
       <AnchorPane layoutX="45.0" layoutY="35.0" prefHeight="474.0" prefWidth="642.0" style="-fx-background-color: #9c2b27;">
          <children>
-            <JFXTextField fx:id="eId" focusColor="#f5f5f5" labelFloat="true" layoutX="55.0" layoutY="31.0" prefHeight="36.0" prefWidth="233.0" promptText="Employee ID" unFocusColor="#eeeded">
+            <JFXTextField fx:id="eId" focusColor="#f5f5f5" labelFloat="true" layoutX="55.0" layoutY="31.0" prefHeight="36.0" prefWidth="233.0" promptText="Employee ID" stylesheets="@textFieldColor.css" unFocusColor="#eeeded">
                <font>
                   <Font size="15.0" />
                </font>
             </JFXTextField>
             <FontAwesomeIconView fill="#f2f2f2" glyphName="KEY" layoutX="14.0" layoutY="59.0" size="30.0" />
-            <JFXTextField fx:id="ename" focusColor="#f5f5f5" labelFloat="true" layoutX="372.0" layoutY="33.0" prefHeight="36.0" prefWidth="233.0" promptText="Employee Name" unFocusColor="#eeeded">
+            <JFXTextField fx:id="ename" focusColor="#f5f5f5" labelFloat="true" layoutX="372.0" layoutY="33.0" prefHeight="36.0" prefWidth="233.0" promptText="Employee Name" stylesheets="@textFieldColor.css" unFocusColor="#eeeded">
                <font>
                   <Font size="15.0" />
                </font>
             </JFXTextField>
             <MaterialDesignIconView fill="#f2f2f2" glyphName="ACCOUNT" layoutX="327.0" layoutY="62.0" size="30.0" />
-            <JFXPasswordField fx:id="ePass" focusColor="WHITESMOKE" labelFloat="true" layoutX="55.0" layoutY="107.0" prefHeight="36.0" prefWidth="233.0" promptText="Employee Password" unFocusColor="#f5f2f2">
+            <JFXPasswordField fx:id="ePass" focusColor="WHITESMOKE" labelFloat="true" layoutX="55.0" layoutY="107.0" prefHeight="36.0" prefWidth="233.0" promptText="Employee Password" stylesheets="@textFieldColor.css" unFocusColor="#f5f2f2">
                <font>
                   <Font size="15.0" />
                </font>
             </JFXPasswordField>
             <MaterialDesignIconView fill="#f2f2f2" glyphName="LOCK" layoutX="14.0" layoutY="143.0" size="30.0" text="" />
-            <JFXTextField fx:id="eloc" focusColor="#f5f5f5" labelFloat="true" layoutX="371.0" layoutY="110.0" prefHeight="36.0" prefWidth="233.0" promptText="Employee Location" unFocusColor="#eeeded">
+            <JFXTextField fx:id="eloc" focusColor="#f5f5f5" labelFloat="true" layoutX="371.0" layoutY="110.0" prefHeight="36.0" prefWidth="233.0" promptText="Employee Location" stylesheets="@textFieldColor.css" unFocusColor="#eeeded">
                <font>
                   <Font size="15.0" />
                </font>
@@ -54,19 +54,19 @@
                </font>
             </JFXRadioButton>
             <FontAwesomeIconView fill="#f2f2f2" glyphName="TRANSGENDER_ALT" layoutX="14.0" layoutY="225.0" size="30.0" />
-            <JFXTextField fx:id="ePhone" focusColor="WHITE" labelFloat="true" layoutX="374.0" layoutY="187.0" prefHeight="36.0" prefWidth="233.0" promptText="Employee Phone" unFocusColor="#ebe9e9">
+            <JFXTextField fx:id="ePhone" focusColor="WHITE" labelFloat="true" layoutX="374.0" layoutY="187.0" prefHeight="36.0" prefWidth="233.0" promptText="Employee Phone" stylesheets="@textFieldColor.css" unFocusColor="#ebe9e9">
                <font>
                   <Font size="15.0" />
                </font>
             </JFXTextField>
             <FontAwesomeIconView fill="#f2f2f2" glyphName="PHONE" layoutX="330.0" layoutY="217.0" size="30.0" text="" />
-            <JFXTextField fx:id="eFrnd" focusColor="WHITE" labelFloat="true" layoutX="49.0" layoutY="270.0" prefHeight="36.0" prefWidth="240.0" promptText="Best Friend Name" unFocusColor="WHITE">
+            <JFXTextField fx:id="eFrnd" focusColor="WHITE" labelFloat="true" layoutX="49.0" layoutY="270.0" prefHeight="36.0" prefWidth="240.0" promptText="Best Friend Name" stylesheets="@textFieldColor.css" unFocusColor="WHITE">
                <font>
                   <Font size="15.0" />
                </font>
             </JFXTextField>
             <MaterialDesignIconView fill="#f2f2f2" glyphName="ACCOUNT" layoutX="14.0" layoutY="299.0" size="30.0" />
-            <JFXTextField fx:id="eCnic" focusColor="#f5f5f5" labelFloat="true" layoutX="374.0" layoutY="268.0" prefHeight="36.0" prefWidth="233.0" promptText="Employee Cnic" unFocusColor="#eeeded">
+            <JFXTextField fx:id="eCnic" focusColor="#f5f5f5" labelFloat="true" layoutX="374.0" layoutY="268.0" prefHeight="36.0" prefWidth="233.0" promptText="Employee Cnic" stylesheets="@textFieldColor.css" unFocusColor="#eeeded">
                <font>
                   <Font size="15.0" />
                </font>

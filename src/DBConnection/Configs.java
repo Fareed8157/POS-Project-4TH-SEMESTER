@@ -39,7 +39,7 @@ public class Configs {
     void createConnection(){
         try {       
             Class.forName("com.mysql.jdbc.Driver");       
-        con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb","root","mysql");
+            con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb","root","mysql");
             if(con!=null)
                 System.out.println("Connected");
         } catch (SQLException ex) {

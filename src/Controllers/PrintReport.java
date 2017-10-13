@@ -7,36 +7,23 @@ package Controllers;
 
 import DBConnection.Configs;
 import MainPack.Sale;
-import java.io.File;
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 import net.sf.jasperreports.engine.query.QueryExecuterFactory;
-import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.util.JRProperties;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.swing.JRViewer;
-import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -52,36 +39,54 @@ public class PrintReport extends JFrame{
         this.qu=qu;
     }
     
-    public void showReport(){
+    public void showReport(String invoice){
         try {
-    String sourFile="C:\\NetBeansProjects\\PosInventory\\src\\Reports\\Report1.jrxml";
+            String sourFile="";
+            if(invoice.equals("invoice")){
+                sourFile="C:\\NetBeansProjects\\PosInventory\\src\\Reports\\Report1.jrxml";
+            }else if(invoice.equals("dailySale")){
+                sourFile="C:\\NetBeansProjects\\PosInventory\\src\\Reports\\dailySale.jrxml";
+            }else if(invoice.equals("dailySaleByUser")){
+                sourFile="C:\\NetBeansProjects\\PosInventory\\src\\Reports\\dailySaleByUser.jrxml";
+            }else if(invoice.equals("stocksIn")){
+               sourFile="C:\\NetBeansProjects\\PosInventory\\src\\Reports\\stockIn.jrxml";
+            }else if(invoice.equals("stocksOut")){
+               sourFile="C:\\NetBeansProjects\\PosInventory\\src\\Reports\\stockOut.jrxml";
+            }
+    
           JasperDesign jasperDesign=JRXmlLoader.load(sourFile);
-           //JRDesignQuery jquery=new JRDesignQuery();
-           //jquery.setText(qu);
-           //jasperDesign.setQuery(jquery);
-            //HashMap<String,Object> hm=new HashMap<>();
-//            hm.put("invoiceId",2);
-//            hm.put("cashier","fareed");
-            JRProperties.setProperty(QueryExecuterFactory.QUERY_EXECUTER_FACTORY_PREFIX+"plsql"
+           JRProperties.setProperty(QueryExecuterFactory.QUERY_EXECUTER_FACTORY_PREFIX+"plsql"
                             ,"com.jaspersoft.jrx.query.PlSqlQueryExecuterFactory");
             JasperReport jasperReport=JasperCompileManager.compileReport(jasperDesign);
-//          JasperReport jasperReport=JasperCompileManager.compileReport("C:\\NetBeansProjects\\PosInventory\\src\\Reports\\invoiceReport.jrxml");
             JasperPrint jasperPrint=JasperFillManager.fillReport(jasperReport,hm,con);
             JRViewer viewer=new JRViewer(jasperPrint);
-            //JasperViewer.viewReport(jasperPrint);
             viewer.setOpaque(true);
             viewer.setVisible(true);
             this.add(viewer);
             this.setSize(900, 500);
             this.setVisible(true);
-            //con.close();
-           // viewer.setVisible(true);
-           
-    
-            //con.close();
-        } catch (JRException ex) {
+            } catch (JRException ex) {
             JOptionPane.showMessageDialog(rootPane, ex.getMessage());
         }
-        
     }
+    public void showReport(){
+        String sourFile="C:\\NetBeansProjects\\PosInventory\\src\\Reports\\inventory.jrxml";
+         
+            JasperReport jasperReport=null;
+        try {
+            jasperReport = JasperCompileManager.compileReport(sourFile);
+            JasperPrint jasperPrint=JasperFillManager.fillReport(jasperReport,null,con);
+            JRViewer viewer=new JRViewer(jasperPrint);
+            viewer.setOpaque(true);
+            viewer.setVisible(true);
+            this.add(viewer);
+            this.setSize(900, 500);
+            this.setVisible(true);
+        } catch (JRException ex) {
+            Logger.getLogger(PrintReport.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+       } 
+
 }
+

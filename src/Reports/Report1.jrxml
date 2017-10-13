@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cb0a14f8-9f43-4973-a656-87ec511faf2f">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="147"/>
+	<property name="ireport.y" value="208"/>
 	<parameter name="cashier" class="java.lang.String"/>
 	<parameter name="invoiceId" class="java.lang.Integer"/>
 	<parameter name="rcvd" class="java.lang.Integer"/>
@@ -37,9 +37,6 @@ having id=$P{invoiceId};]]>
 	<variable name="grandSum_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
 		<variableExpression><![CDATA[$F{grandSum}]]></variableExpression>
 	</variable>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
 	<title>
 		<band height="251" splitType="Stretch">
 			<textField>
@@ -120,41 +117,38 @@ having id=$P{invoiceId};]]>
 			</componentElement>
 		</band>
 	</title>
-	<pageHeader>
-		<band splitType="Stretch"/>
-	</pageHeader>
 	<columnHeader>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="21" y="0" width="73" height="20" uuid="c69f0e5d-a5dd-4515-9d84-2572c5b1faef"/>
+				<reportElement mode="Opaque" x="21" y="0" width="73" height="20" backcolor="#CCCCCC" uuid="c69f0e5d-a5dd-4515-9d84-2572c5b1faef"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Item ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="111" y="0" width="98" height="20" uuid="19ac325f-a6aa-472d-8934-af7c0385073d"/>
+				<reportElement mode="Opaque" x="111" y="0" width="98" height="20" backcolor="#CCCCCC" uuid="19ac325f-a6aa-472d-8934-af7c0385073d"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Item Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="222" y="0" width="99" height="20" uuid="23ff0841-a43e-4bb8-9c0e-8ad6b877999d"/>
+				<reportElement mode="Opaque" x="222" y="0" width="99" height="20" backcolor="#CCCCCC" uuid="23ff0841-a43e-4bb8-9c0e-8ad6b877999d"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Unit Price]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="333" y="0" width="100" height="20" uuid="7daa795c-d3ee-40ee-85fc-e1a1d57dc25f"/>
+				<reportElement mode="Opaque" x="333" y="0" width="100" height="20" backcolor="#CCCCCC" uuid="7daa795c-d3ee-40ee-85fc-e1a1d57dc25f"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Quantity]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="444" y="0" width="98" height="20" uuid="2806bedd-333a-4627-a0a9-ee7743cda73b"/>
+				<reportElement mode="Opaque" x="444" y="0" width="98" height="20" backcolor="#CCCCCC" uuid="2806bedd-333a-4627-a0a9-ee7743cda73b"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -192,14 +186,8 @@ having id=$P{invoiceId};]]>
 			</line>
 		</band>
 	</detail>
-	<columnFooter>
-		<band splitType="Stretch"/>
-	</columnFooter>
-	<pageFooter>
-		<band splitType="Stretch"/>
-	</pageFooter>
 	<summary>
-		<band height="266" splitType="Stretch">
+		<band height="215" splitType="Stretch">
 			<staticText>
 				<reportElement x="189" y="117" width="185" height="25" uuid="dcbab591-b960-460c-9469-b8cd62353e4e"/>
 				<textElement>
@@ -233,21 +221,21 @@ having id=$P{invoiceId};]]>
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Total              :]]></text>
+				<text><![CDATA[Total               :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="333" y="31" width="100" height="20" uuid="95b44179-758e-466c-a840-f98ecb10c6bc"/>
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Received      :]]></text>
+				<text><![CDATA[Received       :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="333" y="63" width="100" height="20" uuid="758a1be5-082c-48d0-b3a6-f490aa8eb6fc"/>
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Returned      :]]></text>
+				<text><![CDATA[Returned       :]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="444" y="31" width="100" height="20" uuid="754c655e-50e6-4543-aa53-a3cdd154bd22"/>

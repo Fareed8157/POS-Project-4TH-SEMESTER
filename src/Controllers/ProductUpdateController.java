@@ -31,6 +31,8 @@ import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -111,18 +113,23 @@ public class ProductUpdateController implements Initializable{
     
     public void getProduct(Product product){
         this.product=product;
-        barcode.setText(product.getBarCode());
-        name.setText(product.getName());
-        uPrice.setText(product.getUnitPrice());
-        suppChose.setValue(product.getSupp());
-        desc.setText(product.getDesc());
+        barcode.setText(product.getBarCode().toLowerCase());
+        name.setText(product.getName().toLowerCase());
+        uPrice.setText(product.getUnitPrice().toLowerCase());
+        suppChose.setValue(product.getSupp().toLowerCase());
+        System.out.println("Supplier="+product.getSupp());
+        desc.setText(product.getDesc().toLowerCase());
         System.out.println("");
         String stkInDateOfThisProduct=getDateOfProduct(product.getBarCode());
         System.out.println("Date=="+stkInDateOfThisProduct);
-        stkInDate.setValue(LocalDate.parse(stkInDateOfThisProduct));
-        stockIn.setText(product.getStkIn());
-        category.setValue(product.getCt().getName());
-        picField.setText(product.getImv().toString()); 
+        if(stkInDateOfThisProduct==null){
+            stkInDate.setValue(null);
+        }else{
+            stkInDate.setValue(LocalDate.parse(stkInDateOfThisProduct));
+        }
+        stockIn.setText(product.getStkIn().toLowerCase());
+        category.setValue(product.getCt().getName().toLowerCase());
+        picField.setText(product.getImv().toString().toLowerCase()); 
     }
     @FXML
     void closeStage(MouseEvent event) {
@@ -178,24 +185,35 @@ public class ProductUpdateController implements Initializable{
         });
         stockType.setValue("Existing");
     }
-    
+    private Integer getStockOut(Integer valueOf) {
+    String qu="SELECT stockOut FROM products WHERE BarCode="+valueOf;
+    ResultSet rs=con.execQuery(qu);
+       try {
+           if(rs.next()){
+               return rs.getInt("stockOut");
+           }  } catch (SQLException ex) {
+           Logger.getLogger(ProductUpdateController.class.getName()).log(Level.SEVERE, null, ex);
+       }
+       return 0;
+    }
     private boolean saveData() {
         FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/Product.fxml"));
         try {
             Parent root=loader.load();
         } catch (IOException ex) {
-            Logger.getLogger(ProductNewController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.toString());
         }
         ProductController puc=(ProductController)loader.getController();
         Product pro=null;
         if(!isFieldEmpty()){
-            String bcode=barcode.getText();
-            String pname=name.getText();
-            String des=desc.getText();
-            String upr=uPrice.getText();
+           if(barcodeValidation() & nameValidation() & descValidation() & uPriceValidation() & stockInValidation()){
+            String bcode=barcode.getText().toLowerCase();
+            String pname=name.getText().toLowerCase();
+            String des=desc.getText().toLowerCase();
+            String upr=uPrice.getText().trim().toLowerCase();
             String stkOut="";
-            String picF=picField.getText();
-            Integer cno=findId(category.getValue());
+            String picF=picField.getText().toLowerCase();
+            Integer cno=findId(category.getValue().toLowerCase());
             System.out.println("CategoryID="+cno);
             Category ctg=new Category(cno);
             String date=((JFXTextField)stkInDate.getEditor()).getText();
@@ -207,16 +225,16 @@ public class ProductUpdateController implements Initializable{
             catch (Exception e){
                 System.out.println("Error occurred" + e.getMessage());
             }
-            //String ctg=category.getValue().toString();
-            String sc=suppChose.getValue().toString();
-            String stkin=stockIn.getText();                     //product tracking data
-            String stkDate=stkInDate.getValue().toString();    //product tracking data
-            String stkInType=stockType.getValue().toString();   //chose Type for existing recording or new Record which you are going to Update
+            
+            String sc=suppChose.getValue().toString().toLowerCase();
+            String stkin=stockIn.getText().toLowerCase();                     //product tracking data
+            String stkDate=stkInDate.getValue().toString().toLowerCase();    //product tracking data
+            String stkInType=stockType.getValue().toString().toLowerCase();   //chose Type for existing recording or new Record which you are going to Update
             String qu="";
             PreparedStatement ps;
             
             if(!(picField.getText().equals(product.getImv().toString()))){    //execute when picture is changed
-                qu="UPDATE products SET BarCode=?, ProductName=?,PDescription=?,unitPrice=?,stockOut=?,picture=?,CategoryID=?,SupplierID=? WHERE BarCode="+Integer.valueOf(product.getBarCode());
+                qu="UPDATE products SET BarCode=?, ProductName=?,PDescription=?,unitPrice=?,stockOut=?,picture=?,CategoryID=?,SupplierID=?,availPro=? WHERE BarCode="+Integer.valueOf(product.getBarCode());
                 System.out.println("after quwey");
                if(!(product.getBarCode().equals(barcode.getText()))){    //execute when brcode is changed
                     if(!checkDuplicate(bcode)){                           //ie checks for changed barcode whether it is in db or not
@@ -229,10 +247,13 @@ public class ProductUpdateController implements Initializable{
                             ps.setString(2, pname);
                             ps.setString(3, des);
                             ps.setString(4, upr);
-                            ps.setString(5, "0");
+                            System.out.println("Upr="+upr);
+                            ps.setInt(5, getStockOut(Integer.valueOf(bcode)));
                             ps.setBinaryStream(6, (InputStream)is, (int)file.length());
                             ps.setInt(7, cno);
                             ps.setString(8, sc);
+                            ps.setString(9,stkin);
+                            
                             System.out.println("Before executupdate");
                             if(ps.executeUpdate()!=0){
                              ps.close();
@@ -263,53 +284,53 @@ public class ProductUpdateController implements Initializable{
                         return false;
                     }
                 }else{                                   //execute when bar code is same as in table 
-                   System.out.println("Inside else ");
-                   qu="UPDATE products SET ProductName=?,PDescription=?,unitPrice=?,stockOut=?,picture=?,CategoryID=?,SupplierID=? WHERE BarCode =?";
-//                    qu="UPDATE products SET ProductName=?, "
-//                        + "PDescription=?,unitPrice=?,stockOut=?,picture=?,CategoryID=?"
-//                            + ",SupplierID=? WHERE BarCode="+Integer.valueOf(bcode);
-                    ps=con.execQueryPrep(qu);
-                    System.out.println("excuted7");
-                    System.out.println("after execution Inside else ");
-                    try {
-                       // ps.setString(1, bcode);
-                            ps.setString(1, pname);
-                            ps.setString(2, des);
-                            ps.setString(3, upr);
-                            ps.setString(4, "0");
-                            ps.setBinaryStream(5, (InputStream)is, (int)file.length());
-                            ps.setInt(6, cno);
-                            ps.setString(7, sc);
-                            ps.setInt(8, Integer.valueOf(bcode));
-                        if(ps.executeUpdate()!=0){
-                             ps.close();
-                             
-                              //inventory Table
-                            if((stkInType.equals("Existing"))){
-                            qu="UPDATE inventory SET stockIn="+product.getStkIn()+",updateDate='"+tsdf.format(today)+"' WHERE BarCode="+Integer.valueOf(bcode);
+                   try {
+                        qu="UPDATE products SET BarCode=?, ProductName=?,PDescription=?,unitPrice=?,stockOut=?,picture=?,CategoryID=?,SupplierID=?,availPro=? WHERE BarCode="+Integer.valueOf(product.getBarCode());
                             ps=con.execQueryPrep(qu);
-                            ps.executeUpdate();
-                            ps.close();
-                            }else{
-                            qu="INSERT INTO inventory VALUES("+stkin+","+bcode+",'"+tsdf.format(today)+"')";
-                            con.execAction(qu);
+                            System.out.println("after execution");
+                            //product Table
+                            System.out.println("bcode=="+bcode);
+                            ps.setInt(1, Integer.valueOf(bcode));
+                            ps.setString(2, pname);
+                            ps.setString(3, des);
+                            ps.setString(4, upr);
+                            System.out.println("Upr="+upr);
+                            ps.setInt(5, getStockOut(Integer.valueOf(bcode)));
+                            ps.setBinaryStream(6, (InputStream)is, (int)file.length());
+                            ps.setInt(7, cno);
+                            ps.setString(8, sc);
+                            ps.setString(9,stkin);
+                            
+                            System.out.println("Before executupdate");
+                            if(ps.executeUpdate()!=0){
+                             ps.close();
+                            pro=new Product(bcode,pname,des,upr,stkin,stkOut,im,ctg,sc);
+                            //inventory Table
+                             if((stkInType.equals("Existing"))){
+                                qu="UPDATE inventory SET stockIn="+product.getStkIn()+",updateDate='"+tsdf.format(today)+"' WHERE BarCode="+Integer.valueOf(bcode);
+                                ps=con.execQueryPrep(qu);
+                                ps.executeUpdate();
+                                ps.close();
+                                }else{
+                                qu="INSERT INTO inventory VALUES("+stkin+","+bcode+",'"+tsdf.format(today)+"')";
+                                con.execAction(qu);
+                                } 
+                             puc.getList().add(pro);
+                             puc.refreshTable();
+                             return true;   
                             }
-                            System.out.println("excuted1");
-                        
-                        puc.getList().add(pro);
-                        puc.refreshTable();
-                        return true;
+                            
+                            System.out.println("excuted8");
+                      } catch (SQLException ex) {
+                            System.out.println(ex.toString());
+                            return false;
                         }
-                    } catch (SQLException ex) {
-                        System.out.println(ex.toString());
-                        return false;
-                    }
                 }
             }         //end of if
             else{
                 qu="UPDATE products SET BarCode=?, productName=?, "
                 + "PDescription=?,unitPrice=?,stockOut=?,"
-                + "CategoryID=?,SupplierID=? WHERE BarCode="+Integer.valueOf(product.getBarCode());
+                + "CategoryID=?,SupplierID=?,availPro=? WHERE BarCode="+Integer.valueOf(product.getBarCode());
                if(!(product.getBarCode().equals(barcode.getText()))){ //execute when bar code is not same
                     if(!checkDuplicate(bcode)){               //execute when there is not any record with new barcode
                         try {
@@ -319,9 +340,11 @@ public class ProductUpdateController implements Initializable{
                             ps.setString(2, pname);
                             ps.setString(3, des);
                             ps.setString(4, upr);
-                            ps.setString(5, "0");
+                            System.out.println("Upr="+upr);
+                            ps.setInt(5, getStockOut(Integer.valueOf(bcode)));
                             ps.setInt(6, cno);
                             ps.setString(7, sc);
+                            ps.setString(7, stockIn.getText());
                             System.out.println("excuted12");
                             if(ps.executeUpdate()!=0){
                                 pro=new Product(bcode,pname,des,upr,stkin,stkOut,im,ctg,sc);
@@ -355,7 +378,7 @@ public class ProductUpdateController implements Initializable{
                 }else{
 //                    qu="UPDATE products SET ProductName=?, "
 //                        + "PDescription=?,unitPrice=?,stockOut=?,CategoryID=?,SupplierID=? WHERE BarCode="+Integer.valueOf(bcode);
-                    qu="UPDATE products SET ProductName='"+pname+"',PDescription='"+des+"',unitPrice="+0+",CategoryID="+cno+",SupplierID="+sc+" WHERE BarCode="+Integer.valueOf(bcode);
+                    qu="UPDATE products SET ProductName='"+pname+"',PDescription='"+des+"',unitPrice="+Math.round(Double.valueOf(upr))+",stockOut="+getStockOut(Integer.valueOf(bcode))+",CategoryID="+cno+",SupplierID="+sc+",availPro="+Integer.valueOf(stockIn.getText())+" WHERE BarCode="+Integer.valueOf(bcode);
                     System.out.println("Query"+qu);
                     //ps=con.execQueryPrep(qu);
                     System.out.println("excuted6");
@@ -375,18 +398,6 @@ public class ProductUpdateController implements Initializable{
                         puc.refreshTable();
                          return true;
                         }
-//                        ps.setString(1, pname);
-//                        ps.setString(2, des);
-//                        ps.setString(3, upr);
-//                        ps.setString(4, "0");
-//                        ps.setInt(5, cno);
-//                        ps.setString(6, sc);
-//                        System.out.println("excuted10");
-//                        ps.executeUpdate(qu);
-//                        System.out.println("excuted5");
-                        //ps.close();
-                        //inventory Table
-                        
                     } catch (SQLException ex) {
                         System.out.println(ex.toString());
                         return false;
@@ -394,9 +405,11 @@ public class ProductUpdateController implements Initializable{
                 }
             }
             
-        }
+        }//end of inner if              
+    }//end of outer if
+
        return false;
-    }
+}
     
     private boolean checkDuplicate(String id) {
         String qu="SELECT * FROM products WHERE BarCode="+id;
@@ -511,9 +524,91 @@ public class ProductUpdateController implements Initializable{
         return null;
     }
 
+  private boolean barcodeValidation(){
+        Pattern p=Pattern.compile("[0-9]+");
+        Matcher m=p.matcher(barcode.getText());
+        if(m.find() && m.group().equals(barcode.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate BarCode");
+            a1.setContentText("Please Enter Valid BarCode");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean uPriceValidation(){
+        Pattern p=Pattern.compile("[0.0-9.9]+");
+        Matcher m=p.matcher(uPrice.getText());
+        if(m.find() && m.group().equals(uPrice.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Unit Price");
+            a1.setContentText("Please Enter Valid Unit Price");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean stockInValidation(){
+        Pattern p=Pattern.compile("[0-9]+");
+        Matcher m=p.matcher(stockIn.getText());
+        if(m.find() && m.group().equals(stockIn.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Stock In");
+            a1.setContentText("Please Enter Valid Stock In");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean nameValidation() {
+        Pattern p=Pattern.compile("^\\p{L}+[\\p{L}\\p{Z}\\p{P}]{0,}");
+        Matcher m=p.matcher(name.getText());
+        if(m.find() && m.group().equals(name.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Product Name");
+            a1.setContentText("Please Enter Valid Product Name");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean descValidation() {
+        Pattern p=Pattern.compile("^\\p{L}+[\\p{L}\\p{Z}\\p{P}]{0,}");
+        Matcher m=p.matcher(desc.getText());
+        if(m.find() && m.group().equals(desc.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Product Description");
+            a1.setContentText("Please Enter Valid Product Description");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean picFieldValidation() {
+        Pattern p=Pattern.compile("([a-zA-Z]:)?(\\\\\\\\?[a-zA-Z0-9_.-]+)*\\\\?\\\\?");
+        Matcher m=p.matcher(picField.getText());
+        if(m.find() && m.group().equals(picField.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Image Pathe");
+            a1.setContentText("Please Enter Valid Image Path");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+
     
-
-   
-
     
 }

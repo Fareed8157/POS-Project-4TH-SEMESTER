@@ -1,0 +1,13 @@
+.jfx-button:hover{
+    -fx-background-color:  #29B6F6;
+}
+
+.jfx-button{
+    -fx-background-color:   #eeeeee;
+}
+.glpyh-icon{
+    -fx-fill: #537bff;
+}
+.jfx-button:hover .glyph-icon{
+    -fx-fill: white;
+}

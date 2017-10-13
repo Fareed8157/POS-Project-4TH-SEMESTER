@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="599" pageHeight="3616" columnWidth="559" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="63f3ecaa-1191-4391-a294-8852b5196aa4">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="dateOfInvoice" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select date(i.invoiceDateTime) dateOfInvoice,p.BarCode, p.ProductName,p.PDescription,pro.Quantity,p.unitPrice,i.InvoiceID id
+from invoice i inner join productinvoice pro on(i.InvoiceID=pro.InvoiceID)
+inner join products p on(pro.BarCode=p.BarCode)
+group by i.InvoiceID,p.BarCode
+having dateOfInvoice=$P{dateOfInvoice};]]>
+	</queryString>
+	<field name="dateOfInvoice" class="java.sql.Date"/>
+	<field name="BarCode" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ProductName" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PDescription" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Quantity" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="unitPrice" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.Integer"/>
+	<variable name="id_1" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{id}]]></variableExpression>
+	</variable>
+	<variable name="TotalSale" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{unitPrice}]]></variableExpression>
+	</variable>
+	<variable name="subTotal" class="java.math.BigDecimal" resetType="Group" resetGroup="Invoice ID" calculation="Sum">
+		<variableExpression><![CDATA[$F{unitPrice}]]></variableExpression>
+	</variable>
+	<group name="Invoice ID">
+		<groupExpression><![CDATA[$F{id}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement mode="Opaque" x="133" y="0" width="89" height="20" backcolor="#99FFFF" uuid="15393029-5605-4e76-8077-c358014b7347"/>
+					<textElement>
+						<font size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="12" y="0" width="121" height="20" backcolor="#99FFFF" uuid="ca3b10eb-9301-4ad3-b631-78dde912e8e0"/>
+					<textElement>
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Invoice ID]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="21">
+				<textField>
+					<reportElement mode="Opaque" x="444" y="0" width="100" height="20" backcolor="#99FFFF" uuid="ad4b6805-7fc2-4ff6-b6ca-107cf5637ac3"/>
+					<textElement>
+						<font size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{subTotal}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="237" y="0" width="207" height="20" backcolor="#99FFFF" uuid="7dcc8e6b-1356-4a80-adc3-a8ba0706bc8b"/>
+					<textElement>
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Sub Total]]></text>
+				</staticText>
+				<line>
+					<reportElement x="12" y="19" width="532" height="1" uuid="b8103f4a-64ef-44f3-b3ea-415e17eb3c21"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="101" splitType="Stretch">
+			<line>
+				<reportElement x="12" y="31" width="532" height="1" uuid="260a580c-1ca5-4600-b958-981436bca748"/>
+			</line>
+			<staticText>
+				<reportElement x="174" y="48" width="244" height="30" uuid="c0d17cb9-19b1-42c4-9e73-828f10dc2d30"/>
+				<textElement>
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DAILY SALES BY INVOICE]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="12" y="11" width="136" height="20" backcolor="#99FFFF" uuid="e46d4005-07ff-41dc-908e-3b70d2d807dc"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dateOfInvoice}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="28">
+			<staticText>
+				<reportElement mode="Opaque" x="12" y="0" width="86" height="20" backcolor="#99FFFF" uuid="3dc29b78-b4c4-427c-a37d-ac311dcd2b4b"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Product ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="98" y="0" width="139" height="20" backcolor="#99FFFF" uuid="3f766324-25d8-42c7-94ed-3cd0acc853b2"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Product Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="237" y="0" width="132" height="20" backcolor="#99FFFF" uuid="b6610dcc-5287-4648-b3d1-d3e059425072"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PDescription]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="369" y="0" width="75" height="20" backcolor="#99FFFF" uuid="b6ea8caf-3a8a-4c3f-9aa9-969461bd1180"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quantity]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="444" y="0" width="100" height="20" backcolor="#99FFFF" uuid="8aacdaae-3ed2-494e-ba6f-14e083a1d551"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unit Price]]></text>
+			</staticText>
+			<line>
+				<reportElement x="12" y="19" width="532" height="1" uuid="95044705-091b-4fc8-bf9d-f13eae38286a"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="12" y="0" width="69" height="20" uuid="a3c5bdb1-e7fb-460a-984f-23cc479ce367"/>
+				<textFieldExpression><![CDATA[$F{BarCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="112" y="0" width="110" height="20" uuid="d11ea2c6-34a0-415c-abf9-a8f8e7751c09"/>
+				<textFieldExpression><![CDATA[$F{ProductName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="237" y="0" width="112" height="20" backcolor="#99FFFF" uuid="54ce19df-c381-4bbe-9b23-d141e16582c4"/>
+				<textFieldExpression><![CDATA[$F{PDescription}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="369" y="0" width="65" height="20" uuid="18d65c47-3b94-4f13-97a0-b4e0ddb8b1fc"/>
+				<textFieldExpression><![CDATA[$F{Quantity}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="444" y="0" width="100" height="20" uuid="ca84557e-bbc2-419c-b083-4c1ad816d7c5"/>
+				<textFieldExpression><![CDATA[$F{unitPrice}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band height="20">
+			<textField>
+				<reportElement mode="Opaque" x="444" y="0" width="100" height="20" backcolor="#99FFFF" uuid="b70f3e4b-587e-4d6e-855a-1ef3e25ac328"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TotalSale}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="12" y="0" width="432" height="20" forecolor="#000000" backcolor="#99FFFF" uuid="a5784db1-eb4e-4c49-a62b-d363a38cd699"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

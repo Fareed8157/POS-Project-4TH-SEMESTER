@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="822" pageHeight="842" columnWidth="782" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2b5131fb-1193-4bd6-b59b-355d6e67a559">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[select p.BarCode,p.ProductName,p.PDescription,i.stockIn, date(i.updateDate) purchasedDate ,s.SupplierID,s.sname,s.lname
+from inventory i inner join products p on(i.BarCode=p.BarCode)
+inner join supplier s on(p.SupplierID=s.SupplierID)
+group by i.updateDate;]]>
+	</queryString>
+	<field name="BarCode" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ProductName" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PDescription" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="stockIn" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="purchasedDate" class="java.sql.Date"/>
+	<field name="SupplierID" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sname" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="lname" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="total" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{stockIn}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="89" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="333" y="34" width="169" height="27" backcolor="#99FFFF" uuid="5b6bf721-5e01-4fb8-94d4-f09df08a2af5"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Inventory Report]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="22" y="6" width="150" height="28" uuid="5b0eb0be-5133-440e-9520-001c24f07504"/>
+				<textElement>
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="67" height="20" backcolor="#99FFFF" uuid="a20c6930-8efc-4ffe-b23f-5acaeaf111fe"/>
+				<text><![CDATA[ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="67" y="0" width="93" height="20" backcolor="#99FFFF" uuid="3021cade-1450-45fc-8935-3cf45c1efa8b"/>
+				<text><![CDATA[Product Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="160" y="0" width="107" height="20" backcolor="#99FFFF" uuid="6ba0bfdb-a686-4afa-b7ab-c67597c8915e"/>
+				<text><![CDATA[PDescription]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="267" y="0" width="66" height="20" backcolor="#99FFFF" uuid="1fc77ec9-5278-441d-b6cd-896f22d9f679"/>
+				<text><![CDATA[Quantity]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="333" y="0" width="95" height="20" backcolor="#99FFFF" uuid="a0c64d80-4c1a-4fe0-9cf9-40249c002ab6"/>
+				<text><![CDATA[Purchase Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="428" y="0" width="127" height="20" backcolor="#99FFFF" uuid="46e58d6b-f31a-4278-af57-9247479baf91"/>
+				<text><![CDATA[SupplierID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="555" y="0" width="127" height="20" backcolor="#99FFFF" uuid="c31e45b5-98a6-4c85-b044-48cdede77bb5"/>
+				<text><![CDATA[Supplier Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="682" y="0" width="100" height="20" backcolor="#99FFFF" uuid="312430f8-2fc1-4c1a-a08c-8415a4b797dd"/>
+				<text><![CDATA[Company Name]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="67" height="20" uuid="891fad04-5d39-4651-8816-74ccf8912413"/>
+				<textFieldExpression><![CDATA[$F{BarCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="67" y="0" width="93" height="20" uuid="35ef70df-19c6-443d-a720-828e9f8feacd"/>
+				<textFieldExpression><![CDATA[$F{ProductName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="160" y="0" width="107" height="20" uuid="06d01c99-200e-4835-9b84-a4c8d0ba16c8"/>
+				<textFieldExpression><![CDATA[$F{PDescription}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="267" y="0" width="66" height="20" uuid="50cbc9f8-c782-43d6-b2d7-d843a7c848e5"/>
+				<textFieldExpression><![CDATA[$F{stockIn}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="333" y="0" width="95" height="20" uuid="c49a7787-a5bc-469b-be78-0ce556cd4c53"/>
+				<textFieldExpression><![CDATA[$F{purchasedDate}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="3" y="0" width="779" height="1" uuid="a1516245-d41c-4abb-89ea-6833bbbac0ec"/>
+			</line>
+			<textField>
+				<reportElement x="428" y="0" width="127" height="20" uuid="9c91f49b-4a2c-4e6b-a5bf-3fa7c6a6e313"/>
+				<textFieldExpression><![CDATA[$F{SupplierID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="555" y="0" width="127" height="20" uuid="aa69c9da-e0ba-419a-acb1-bd93ff016b91"/>
+				<textFieldExpression><![CDATA[$F{sname}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="683" y="0" width="100" height="20" uuid="1baec003-7ed0-428f-b6d6-1ce738f14d17"/>
+				<textFieldExpression><![CDATA[$F{lname}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="3" y="0" width="264" height="27" backcolor="#99FFFF" uuid="d1596fa0-f7a2-4475-983a-8fc4359e1a5c"/>
+				<textElement>
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="267" y="0" width="66" height="27" backcolor="#99FFFF" uuid="2dbc1acd-4135-4dd9-acc9-1ff91a3dd620"/>
+				<textElement>
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

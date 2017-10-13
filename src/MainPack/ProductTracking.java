@@ -65,8 +65,5 @@ public class ProductTracking {
     public ObjectProperty<Date> upDateProperty(){
         return this.upDate;
     }
-    
-    
-    
-    
+     
 }

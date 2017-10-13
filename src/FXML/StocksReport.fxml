@@ -5,6 +5,7 @@
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -12,7 +13,7 @@
    <children>
       <AnchorPane layoutX="-3.0" layoutY="-2.0" prefHeight="89.0" prefWidth="612.0" style="-fx-background-color: #29B6F6;">
          <children>
-            <Label layoutX="51.0" layoutY="36.0" text="Daily Sales Report" textFill="#1a237e">
+            <Label layoutX="51.0" layoutY="36.0" text="Stock Report" textFill="#1a237e">
                <font>
                   <Font size="18.0" />
                </font>
@@ -31,22 +32,25 @@
          </font>
       </Label>
       <JFXDatePicker fx:id="selectedDate" defaultColor="#29b6f6" layoutX="204.0" layoutY="129.0" prefHeight="27.0" prefWidth="260.0" />
-      <JFXRadioButton fx:id="userWise" layoutX="148.0" layoutY="277.0" text="Stocks In" textFill="#1a237e">
+      <JFXRadioButton fx:id="stocksIn" layoutX="152.0" layoutY="277.0" text="Stocks In" textFill="#1a237e">
+         <font>
+            <Font size="16.0" />
+         </font>
+         <toggleGroup>
+            <ToggleGroup fx:id="stockType" />
+         </toggleGroup>
+      </JFXRadioButton>
+      <JFXRadioButton fx:id="stocksOut" layoutX="332.0" layoutY="277.0" text="Stocks Out" textFill="#1a237e">
          <font>
             <Font size="16.0" />
          </font>
       </JFXRadioButton>
-      <JFXRadioButton fx:id="invoiceWise" layoutX="332.0" layoutY="277.0" text="Stocks Out" textFill="#1a237e">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </JFXRadioButton>
-      <JFXButton fx:id="loadReport" buttonType="RAISED" layoutX="200.0" layoutY="354.0" onAction="#onAction" prefHeight="71.0" prefWidth="132.0" style="-fx-background-color: #B3E5FC;" text="Load Report" textFill="#0d47a1">
+      <JFXButton fx:id="loadReport" buttonType="RAISED" layoutX="170.0" layoutY="354.0" onAction="#onAction" prefHeight="71.0" prefWidth="132.0" stylesheets="@posCss.css" text="Load Report" textFill="#0d47a1">
          <font>
             <Font size="17.0" />
          </font>
       </JFXButton>
-      <JFXButton fx:id="cancel" buttonType="RAISED" layoutX="362.0" layoutY="354.0" onAction="#onAction" prefHeight="71.0" prefWidth="132.0" style="-fx-background-color: #B3E5FC;" text="Cancel" textFill="#0d47a1">
+      <JFXButton fx:id="cancel" buttonType="RAISED" layoutX="332.0" layoutY="354.0" onAction="#onAction" prefHeight="71.0" prefWidth="132.0" stylesheets="@posCss.css" text="Cancel" textFill="#0d47a1">
          <font>
             <Font size="17.0" />
          </font>

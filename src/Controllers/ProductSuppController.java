@@ -21,6 +21,9 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -98,8 +101,8 @@ public class ProductSuppController implements Initializable{
     private FontAwesomeIconView searcIcon;
 
     @FXML
-    private List<Supplier> items;
     private MaterialDesignIconView close;
+    private List<Supplier> items;
     ObservableList<Supplier> selectedRows,allSupplier;
     ObservableList<Supplier> filteredData=FXCollections.observableArrayList();
     Configs con;
@@ -117,8 +120,8 @@ public class ProductSuppController implements Initializable{
     
     @FXML
     void closeStage(MouseEvent event) {
-        Stage win=(Stage)close.getScene().getWindow();
-        win.close();
+        Stage stage=(Stage)close.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
@@ -134,12 +137,10 @@ public class ProductSuppController implements Initializable{
             infoMessage("Sucessfully Added");
             refreshTable();    
             }
-            
         }
         else if(event.getSource()==delete){
             ObservableList<Supplier> selectedRows,allCategories;
             allSupplier=suppTable.getItems();
-            //selectedRows=suppTable.getSelectionModel().getSelectedItems();
             items =  new ArrayList (suppTable.getSelectionModel().getSelectedItems());
             String id=suppTable.getSelectionModel().getSelectedItem().getSid();
             Alert a1= new Alert(Alert.AlertType.CONFIRMATION);
@@ -147,7 +148,6 @@ public class ProductSuppController implements Initializable{
             a1.setContentText("Are Sure Want to Delete ?");
             a1.setHeaderText(null);
             Optional<ButtonType> action=a1.showAndWait();
-            //win.initModality(Modality.WINDOW_MODAL);
             if(action.get()==ButtonType.OK){
             removeRecords(items);    
             }
@@ -166,11 +166,7 @@ public class ProductSuppController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         update.setDisable(true);
         delete.setDisable(true);
-        suppTable.setEditable(true);
-//        suppTable.focusedProperty().addListener((a,b,c) -> {
-//        suppTable.getSelectionModel().clearSelection();
-//        });
-        
+        suppTable.setEditable(true);       
         suppTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         con=Configs.getInstance();
         loadData();
@@ -297,13 +293,10 @@ public class ProductSuppController implements Initializable{
             }
         }
 
-        // Must re-sort table after items changed
-        //reapplyTableSortOrder();
     }
     private boolean matchesFilter(Supplier ct) {
         String filterString = search.getText();
         if (filterString == null || filterString.isEmpty()) {
-            // No filter --> Add all.
             return true;
         }
         String lowerCaseFilterString = filterString.toLowerCase();
@@ -344,7 +337,8 @@ public class ProductSuppController implements Initializable{
             return false;
         }   
         else{
-            Supplier sp1=new Supplier(suId,fnam,lnam,em,phn);
+            if(idValidation() & fNameValidation() & lnameValidation() & emailValidation() & phnoValidation()){
+                Supplier sp1=new Supplier(suId,fnam,lnam,em,phn);
             String qu="INSERT INTO supplier VALUES(?,?,?,?,?)";
             
             if(!checkDuplicateForFields(sp1)){
@@ -369,8 +363,11 @@ public class ProductSuppController implements Initializable{
             else{
                 errorMessage("Duplicate Values");
                 return false;
-            } //end of inner else
+            } //end of inner else  
+            }
+        return false;  
         } //end of outer else
+        
       }
     
     
@@ -416,7 +413,6 @@ public class ProductSuppController implements Initializable{
                  list.add(sp);
                  suppTable.setItems(filteredData);
              }
-             //suppTable.setItems(list);
              suppTable.setItems(filteredData);
          } catch (SQLException ex) {
              System.out.println(ex.toString());
@@ -462,7 +458,6 @@ public class ProductSuppController implements Initializable{
         if(flag){
            refreshTable();
            return; 
-            //errorMessage("Duplicate");
         }
         }else if(type=="2"){
             String qu="UPDATE supplier SET sname='"+t.getNewValue()+"' WHERE SupplierID='"+sp.getSid()+"';";
@@ -578,8 +573,8 @@ public class ProductSuppController implements Initializable{
             return false;
         }   
         else{
-            
-            System.out.println(phn+","+sp.getPhno());
+            if(idValidation() & fNameValidation() & lnameValidation() & emailValidation() & phnoValidation()){
+                           System.out.println(phn+","+sp.getPhno());
             boolean flag=(!checkDuplicateForUpdate(suId,"1") && !checkDuplicateForUpdate(em,"2") && !checkDuplicateForUpdate(phn,"3") );
             //boolean flag1=(!checkDuplicateForUpdate(phn,"3"));
            System.out.println("Flag=="+flag);
@@ -588,9 +583,6 @@ public class ProductSuppController implements Initializable{
                     "' WHERE SupplierID='"+suId+"';";
             System.out.println("phone=="+phn);
             if(flag){
-//                if(!checkDuplicateForUpdate(phn,"3")){
-//                    System.out.println("Inside if of phn");
-//                }
                 System.out.println("Inside ADD METHOD"); //end catch
                 list.add(new Supplier(suId,fnam,lnam,em,phn));
                 if(con.execAction(qu)){
@@ -604,7 +596,9 @@ public class ProductSuppController implements Initializable{
             else{
                 errorMessage("Duplicate Values");
                 return false;
-            } //end of inner else
+            } //end of inner else             
+            }
+        return false;
         } //end of outer else
     }
 
@@ -670,6 +664,77 @@ public class ProductSuppController implements Initializable{
     }
 
     
+    private boolean idValidation(){
+        Pattern p=Pattern.compile("[0-9]+");
+        Matcher m=p.matcher(id.getText());
+        if(m.find() && m.group().equals(id.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate ID");
+            a1.setContentText("Please Enter Valid ID");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean phnoValidation() {
+        Pattern p=Pattern.compile("(0|92)?[3-4][0-9]{9}");
+        Matcher m=p.matcher(phno.getText());
+        if(m.find() && m.group().equals(phno.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Number");
+            a1.setContentText("Please Enter Valid Number");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    
+    private boolean fNameValidation() {
+        Pattern p=Pattern.compile("[a-zA-Z]+");
+        Matcher m=p.matcher(fname.getText());
+        if(m.find() && m.group().equals(fname.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate First Name");
+            a1.setContentText("Please Enter Valid First Name");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean lnameValidation() {
+        Pattern p=Pattern.compile("^\\p{L}+[\\p{L}\\p{Z}\\p{P}]{0,}");
+        Matcher m=p.matcher(lname.getText());
+        if(m.find() && m.group().equals(lname.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Company Name");
+            a1.setContentText("Please Enter Valid Company Name");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean emailValidation() {
+        Pattern p=Pattern.compile("[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+");
+        Matcher m=p.matcher(email.getText());
+        if(m.find() && m.group().equals(email.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Email");
+            a1.setContentText("Please Enter Valid Email");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
     
     class EditingCell extends TableCell<Supplier, String> {
 
@@ -714,7 +779,6 @@ public class ProductSuppController implements Initializable{
                 if (isEditing()) {
                     if (textField != null) {
                         textField.setText(getString());
-//                        setGraphic(null);
                     }
                     setText(null);
                     setGraphic(textField);
@@ -728,23 +792,12 @@ public class ProductSuppController implements Initializable{
         private void createTextField() {
             textField = new TextField(getString());
             textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
-//            textField.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//                @Override
-//                public void handle(MouseEvent e) {
-//                    if(checkDuplicate(textField.getText())){
-//                    commitEdit(textField.getText());
-//                    errorMessage("Duplication Not Allowed");
-//                    }
-//                }
-//            });
-            textField.setOnAction(new EventHandler<ActionEvent>() {
+          textField.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
                     
                     commitEdit(textField.getText());
-//                    if(checkDuplicate(textField.getText()))
-//                    errorMessage("Duplication Not Allowed");
-                }
+               }
             });
             
             textField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
@@ -757,7 +810,6 @@ public class ProductSuppController implements Initializable{
                 }
                 
                 else{
-                    //errorMessage("Duplication Not Allowed");
                     System.out.println(textField.getText()+"="+newValue);
                     System.out.println("CreatTextField Method");
                 }

@@ -47,7 +47,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="40.0" />
                      </HBox.margin>
                   </JFXTextField>
-                  <JFXButton fx:id="browse" onAction="#fileHandler" prefHeight="43.0" prefWidth="106.0" text="Browse">
+                  <JFXButton fx:id="browse" onAction="#fileHandler" prefHeight="46.0" prefWidth="99.0" stylesheets="@posCss.css" text="Browse">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="40.0" />
                      </HBox.margin>
@@ -61,7 +61,7 @@
       </VBox>
       <HBox layoutX="51.0" layoutY="393.0" prefHeight="58.0" prefWidth="364.0">
          <children>
-            <JFXButton fx:id="upSave" onAction="#onAction" prefHeight="48.0" prefWidth="175.0" style="-fx-background-color: #B3E5FC;" text="Save" textFill="#757575">
+            <JFXButton fx:id="upSave" onAction="#onAction" prefHeight="48.0" prefWidth="175.0" stylesheets="@posCss.css" text="Save" textFill="#757575">
                <HBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </HBox.margin>
@@ -69,7 +69,7 @@
                   <Font size="22.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="upCancel" layoutX="10.0" layoutY="10.0" onAction="#onAction" prefHeight="48.0" prefWidth="186.0" style="-fx-background-color: #B3E5FC;" text="Cancel" textFill="#757575">
+            <JFXButton fx:id="upCancel" layoutX="10.0" layoutY="10.0" onAction="#onAction" prefHeight="48.0" prefWidth="186.0" stylesheets="@posCss.css" text="Cancel" textFill="#757575">
                <HBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </HBox.margin>

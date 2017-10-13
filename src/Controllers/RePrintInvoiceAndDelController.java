@@ -12,13 +12,19 @@ import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 
 /**
  *
@@ -29,43 +35,43 @@ public class RePrintInvoiceAndDelController implements Initializable{
     
     @FXML
     private JFXTextField invNo;
-
-    @FXML
-    private JFXTextField bcode;
-
+    
     @FXML
     private JFXComboBox<String> delOrPrint;
 
     @FXML
     private JFXButton delOrPrintButton;
     Configs con;
+    ArrayList<Integer> qt=new ArrayList<Integer>();
+    ArrayList<Integer> bcode=new ArrayList<Integer>();
+    
     ObservableList<String> delOrPrintList=FXCollections.observableArrayList();
     @FXML
     void onAction(ActionEvent event) {
         if(delOrPrint.getValue()=="Print"){
-           
-        rePrintInvoice(invNo.getText().trim());
-        }else if(delOrPrint.getValue()=="Delete"){
-            
-            deletInvoice();
-        }else{
-            deleteProduct();
+            if(findInvoice())
+                rePrintInvoice(invNo.getText().trim());    
+            else
+                errorMessage("Invoice Not Found");
+        }else if(delOrPrint.getValue()=="Delete Invoice"){
+             if(findInvoice())
+                deletInvoice();
+            else{
+                 errorMessage("Invoice Not Found");
+             }
         }
     }
      
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         con=Configs.getInstance();
-        bcode.setDisable(true);
-        delOrPrintList.addAll("Delete","Print","Delete Product");
+        invNo.setDisable(true);
+        delOrPrintButton.setDisable(true);
+        delOrPrintList.addAll("Delete Invoice","Print");
         delOrPrint.getItems().addAll(delOrPrintList);
         delOrPrint.setOnAction(e->{
-            if(delOrPrint.getValue()=="Delete Product")
-                bcode.setDisable(false);
-            else if(delOrPrint.getValue()=="Delete Product")
-                bcode.setDisable(true);
-            else
-                bcode.setDisable(true);
+            delOrPrintButton.setDisable(false);
+            invNo.setDisable(false);
             delOrPrintButton.setText(delOrPrint.getValue());
         });
     }
@@ -98,14 +104,106 @@ public class RePrintInvoiceAndDelController implements Initializable{
         hm.put("rcvd",rc);
         hm.put("returned",ret);
         PrintReport pr=new PrintReport(qu,hm);
-        pr.showReport();
+        pr.showReport("invoice");
     }
 
     private void deletInvoice() {
         
+        String qu="DELETE FROM invoice where InvoiceID="+Integer.valueOf(invNo.getText());
+        String qu1="SELECT BarCode,Quantity from productinvoice WHERE InvoiceID="+Integer.valueOf(invNo.getText());
+        ResultSet rs=con.execQuery(qu1);
+        try {
+            while(rs.next()){
+              qt.add(rs.getInt("Quantity"));
+              bcode.add(rs.getInt("BarCode"));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+        }
+        
+        if(updateStkOutAvail(qt,bcode)){
+            con.execAction(qu);
+            infoMessage("Deleted");
+        }
     }
 
-    private void deleteProduct() {
-        
+    
+    private boolean updateStkOutAvail(ArrayList<Integer> qt, ArrayList<Integer> bcode) {
+        String qu="";
+        int i=0;
+        int avail=0;
+        int stkOut=0;
+        ResultSet rs=null;
+        boolean flag=false;
+        for(Integer c : bcode){
+            System.out.println("Bcode="+c);
+            qu="SELECT stockOut,availPro from products where BarCode="+c;
+            rs=con.execQuery(qu);
+            try {
+                if(rs.next()){
+                stkOut=rs.getInt("stockOut");
+                avail=rs.getInt("availPro");
+                }
+                 //rs.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.toString());
+            }
+            System.out.println("stck="+stkOut+",avaial="+avail);
+            qu="UPDATE products set stockOut="+(stkOut-qt.get(i))+",availPro="+(avail+qt.get(i))+" WHERE BarCode="+c;  
+            flag=con.execAction(qu);
+            i++;
+        }
+           return flag; 
     }
+
+    //dialog boxes
+    private void errorMessage(String message){
+        Alert a1= new Alert(Alert.AlertType.ERROR);
+            a1.setTitle("Error");
+            a1.setContentText(message);
+            a1.setHeaderText(null);
+            a1.showAndWait();
+    }
+    private void infoMessage(String message){
+        Alert a1= new Alert(Alert.AlertType.INFORMATION);
+            a1.setContentText(message);
+            a1.setHeaderText(null);
+            a1.showAndWait();
+    }
+
+    private boolean findInvoice() {
+        String qu="SELECT InvoiceID from invoice WHERE InvoiceID="+Integer.valueOf(invNo.getText());
+        if(!(invNo.getText().isEmpty())){
+            if(invoiceValidation()){
+             ResultSet rs=con.execQuery(qu);
+        try {
+            if(rs.next()){
+                return true;
+            }
+                
+        } catch (SQLException ex) {
+            Logger.getLogger(RePrintInvoiceAndDelController.class.getName()).log(Level.SEVERE, null, ex);
+        }   
+            }
+        }//end of if
+        
+        return false;
+    }
+
+    private boolean invoiceValidation() {
+        Pattern p=Pattern.compile("[0-9]+");
+        Matcher m=p.matcher(invNo.getText());
+        if(m.find() && m.group().equals(invNo.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Invoice");
+            a1.setContentText("Please Enter Valid Invoice");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+
+    
 }

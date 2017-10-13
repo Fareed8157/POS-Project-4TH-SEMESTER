@@ -189,11 +189,8 @@ public class ProductController implements Initializable{
               Parent root=loader.load();
               ProductUpdateController puc=(ProductUpdateController)loader.getController();
               Product product=proTable.getSelectionModel().getSelectedItem();
-              //System.out.println("Date In Prod=="+getDateOfProduct(product.getBarCode()));
               puc.getProduct(product);
-//           ProductNewController pn=(ProductNewController)loader.getController();
-            //Parent root=FXMLLoader.load(getClass().getResource("/FXML/productUpdate.fxml"));           
-            sc=new Scene(root);
+             sc=new Scene(root);
             win.setScene(sc);
             win.show();
         }
@@ -210,7 +207,6 @@ public class ProductController implements Initializable{
          else if(event.getSource()==deleteItem){
               ObservableList<Supplier> selectedRows,allCategories;
             allProducts=proTable.getItems();
-            //selectedRows=suppTable.getSelectionModel().getSelectedItems();
             items =  new ArrayList (proTable.getSelectionModel().getSelectedItems());
             String id=proTable.getSelectionModel().getSelectedItem().getBarCode();
             Alert a1= new Alert(Alert.AlertType.CONFIRMATION);
@@ -218,7 +214,6 @@ public class ProductController implements Initializable{
             a1.setContentText("Are Sure Want to Delete ?");
             a1.setHeaderText(null);
             Optional<ButtonType> action=a1.showAndWait();
-            //win.initModality(Modality.WINDOW_MODAL);
             if(action.get()==ButtonType.OK){
             removeRecords(items);   
             }
@@ -236,25 +231,8 @@ public class ProductController implements Initializable{
         updateItem.setDisable(true);
         deleteItem.setDisable(true);
         loadTable();
-//        pSearch.setOnKeyPressed(e->{
-//            pSearch.textProperty().addListener((obserable,newValue,oldValue)->{
-//                filterList.setPredicate((Predicate<? super Product>)product->{
-//                    if(newValue==null || newValue.isEmpty())
-//                        return true;
-//                    String lower=newValue.toLowerCase();
-//                    if(product.getBarCode().contains(newValue))
-//                        return true;
-//                    if(product.getName().contains(lower))
-//                        return true;
-//                    
-//                    return false;
-//                });
-//            });
-//            SortedList<Product> sortedData=new SortedList<>(filterList);
-//        sortedData.comparatorProperty().bind(proTable.comparatorProperty());
-//        proTable.setItems(sortedData);
-//        //refreshTable();
-//        });
+        refreshTable();
+        imv.setPreserveRatio(false);
         
         proTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         proTable.getSelectionModel().selectedItemProperty().addListener(((observable,oldVal,newVal)-> {
@@ -355,9 +333,7 @@ public class ProductController implements Initializable{
             }
         }
 
-        // Must re-sort table after items changed
-        //reapplyTableSortOrder();
-    }
+      }
     private boolean matchesFilter(Product ct) {
         String filterString = pSearch.getText();
         if (filterString == null || filterString.isEmpty()) {
@@ -403,26 +379,18 @@ public class ProductController implements Initializable{
                 while((size=in.read(content))!=-1){                          //converting stream into o/p stream
                     ou.write(content, 0, size);
                 }
-                Image im=new Image("file:photo.jpg",true);       // finally getting image object
-               
+                Image im=new Image("file:photo.jpg",203,139,false,false);       // finally getting image object
+               imv.setPreserveRatio(false);
                Category ci=new Category(rs.getInt("CategoryID"),getCategoryId(rs.getString("CategoryID"))); //category object with category id and name
                
                categoryList.add(ci);
                
                String si=rs.getString("SupplierID");
-               p=new Product(bc,pname,pd,up,sin,so,im,ci,si);
+               Integer stkIn=rs.getInt("availPro");
                
-//               Product pr=plist.get(i++);
-//                System.out.println("Name="+pr.getBarCode()
-//                        +",Pname="+pr.getName()
-//                        +",pd="+pr.getDesc()
-//                        +",up="+pr.getUnitPrice()
-//                        +",so="+pr.getStockOut()
-//                        +",sin="+pr.getStkIn()
-//                        +",ci="+pr.getCt().getName()
-//                        +",si="+pr.getSupp()
-//                );
-                plist.add(p);
+               p=new Product(bc,pname,pd,up,stkIn.toString(),so,im,ci,si);
+               
+            plist.add(p);
             proTable.setItems(filteredData);
             }
             
@@ -470,7 +438,7 @@ public class ProductController implements Initializable{
         } catch (SQLException ex) {
             System.out.println(ex.toString());
         }
-        return null;
+        return 0;
     }   
 
     public void refreshTable() {
@@ -495,14 +463,14 @@ public class ProductController implements Initializable{
                 while((size=in.read(content))!=-1){                          //converting stream into o/p stream
                     ou.write(content, 0, size);
                 }
-                Image im=new Image("file:photo.jpg",50,100,true,true);       // finally getting image object
-               
+                Image im=new Image("file:photo.jpg",203,139,false,false);      // finally getting image object
+               imv.setPreserveRatio(false);
                Category ci=new Category(rs.getInt("CategoryID"),getCategoryId(rs.getString("CategoryID"))); //category object with category id and name
                
                categoryList.add(ci);
-               
+               Integer stkIn=rs.getInt("availPro");
                String si=rs.getString("SupplierID");
-               Product p=new Product(bc,pname,pd,up,sin,so,im,ci,si);
+               Product p=new Product(bc,pname,pd,up,stkIn.toString(),so,im,ci,si);
                
                plist.add(p);
                proTable.setItems(filteredData) ;

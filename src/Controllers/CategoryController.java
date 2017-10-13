@@ -50,6 +50,8 @@ import javafx.util.converter.NumberStringConverter;
 import MainPack.*;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -62,36 +64,6 @@ public class CategoryController implements Initializable{
     
     @FXML
     private JFXButton browse;
-     
-    @FXML
-    private TableColumn<?,?> sFname;
-
-    @FXML
-    private TableColumn<?, ?> sLname;
-
-    @FXML
-    private TableColumn<?, ?> sEmail;
-
-    @FXML
-    private TableColumn<?, ?> sPhno;
-
-    @FXML
-    private JFXTextField sFnamField;
-
-    @FXML
-    private JFXTextField sLnamField;
-
-    @FXML
-    private JFXTextField sEmailField;
-
-    @FXML
-    private JFXTextField sPhnoFiled;
-
-    @FXML
-    private JFXButton sAdd;
-
-    @FXML
-    private JFXButton sDel;
 
     @FXML
     private JFXButton closeButton;
@@ -181,7 +153,6 @@ public class CategoryController implements Initializable{
             Parent root=loader.load();
             CategoryUpdateContoller cnc=loader.getController();
             cnc.getCategory(cat);
-//            Parent root=FXMLLoader.load(getClass().getResource("/FXML/categoryUpdate.fxml"));           
             sc=new Scene(root);
             win.initModality(Modality.WINDOW_MODAL);
             win.setScene(sc);
@@ -260,11 +231,7 @@ public class CategoryController implements Initializable{
         }  
     });  
     
-        //define columns here
-        //cId.setCellValueFactory(new PropertyValueFactory<Category,Number>("id"));
         sno.setCellValueFactory(cellData->cellData.getValue().serialNoProperty());
-        //sno.setCellValueFactory(new PropertyValueFactory<Category,Integer>("serialNo"));
-        //sno.setCellValueFactory(cellData->cellData.getValue().serialNoProperty());
         cId.setCellValueFactory(cellData->cellData.getValue().idProperty());
         cname.setCellValueFactory(cellData->cellData.getValue().nameProperty());
         desc.setCellValueFactory(cellData->cellData.getValue().descProperty());
@@ -289,14 +256,6 @@ public class CategoryController implements Initializable{
         cId.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
         cname.setOnEditCommit(e->setEditableCell2(e));
         cname.setCellFactory(TextFieldTableCell.forTableColumn());
-        desc.setOnEditCommit(e->setEditableCell3(e));
-        desc.setCellFactory(TextFieldTableCell.forTableColumn());
-        //cname.setCellValueFactory(cellData->cellData.getValue().idProperty());
-        //file Coding
-        
-       //catTable.setItems(list);
-       //catTable.refresh();
-        //get Database Connection 
         
         loadData();
         catTable.setEditable(true);
@@ -306,8 +265,7 @@ public class CategoryController implements Initializable{
             
             @Override
             public void changed(ObservableValue<? extends String> observable,
-                    String oldValue, String newValue) {
-                    
+                String oldValue, String newValue) {   
                 updateFilteredData();
                 System.out.println("In search Field");
             }
@@ -321,10 +279,7 @@ public class CategoryController implements Initializable{
                 filteredData.add(p);
             }
         }
-
-        // Must re-sort table after items changed
-        //reapplyTableSortOrder();
-    }
+   }
     private boolean matchesFilter(Category ct) {
         String filterString = search.getText();
         if (filterString == null || filterString.isEmpty()) {
@@ -445,20 +400,10 @@ public class CategoryController implements Initializable{
         }
          refreshTable();
     }
-
-    private void setEditableCell3(TableColumn.CellEditEvent<Category, String> e) {
-        TableColumn.CellEditEvent<Category, String> cell;
-        cell=(TableColumn.CellEditEvent<Category, String>) e;
-        Category st=cell.getRowValue();
-         if(cell.getNewValue().toString()!=cell.getOldValue().toString()){
-            updateString(cell,2);           
-        }
-         refreshTable();
-    }
     
     private void update(TableColumn.CellEditEvent<Category, Number> cell) {
         Category ct=cell.getRowValue();
-        String id=ct.getId().toString();
+        Integer id=Integer.valueOf(ct.getId());
         String name=ct.getName();
         String desc=ct.getDesc();
         boolean flag=checkDuplicate(cell.getNewValue().toString(),1);
@@ -476,7 +421,7 @@ public class CategoryController implements Initializable{
     //String Update 
     private void updateString(TableColumn.CellEditEvent<Category, String> cell,Integer type) {
         Category ct=cell.getRowValue();
-        String id=ct.getId().toString();
+        Integer id=Integer.valueOf(ct.getId().toString());
         String name=ct.getName();
         String desc=ct.getDesc();
         String qu;
@@ -504,7 +449,7 @@ public class CategoryController implements Initializable{
         if(type==1)
             qu="SELECT * FROM category WHERE CategoryID="+Integer.valueOf(id);
         else
-             qu="SELECT CategoryName FROM category WHERE CategoryID="+id;
+             qu="SELECT CategoryName FROM category WHERE CategoryName='"+id+"'";
         ResultSet rs=dbCon.execQuery(qu);
         try {
             if(rs.next()){

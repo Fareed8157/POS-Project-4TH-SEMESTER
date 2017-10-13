@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
@@ -21,26 +20,21 @@
                   <Font size="16.0" />
                </font>
             </JFXPasswordField>
-            <JFXButton fx:id="login" layoutX="51.0" layoutY="240.0" onAction="#handleOnAction" prefHeight="31.0" prefWidth="200.0" style="-fx-background-color: #e45652;" text="Login" textFill="#dacfcf" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="38.0">
+            <JFXButton fx:id="login" layoutX="51.0" layoutY="257.0" onAction="#handleOnAction" prefHeight="31.0" prefWidth="200.0" style="-fx-background-color: ff5252;" text="Login" textFill="#dacfcf" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="38.0">
                <font>
                   <Font size="15.0" />
                </font>
             </JFXButton>
-            <Label layoutX="117.0" layoutY="24.0" text="Sign In" textFill="#ddd5d5">
+            <Label layoutX="117.0" layoutY="24.0" text="Sign In" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <JFXButton fx:id="forgotPass" layoutX="49.0" layoutY="291.0" prefHeight="36.0" prefWidth="200.0" text="Forgot Password?" textFill="#e4dede" underline="true">
+            <JFXButton fx:id="forgotPass" layoutX="49.0" layoutY="308.0" onAction="#handleOnAction" prefHeight="36.0" prefWidth="200.0" stylesheets="@hoverOnly.css" text="Forgot Password?" textFill="#e4dede" underline="true">
                <font>
                   <Font size="15.0" />
                </font>
             </JFXButton>
-            <JFXCheckBox fx:id="checkBox" alignment="CENTER" contentDisplay="RIGHT" layoutX="51.0" layoutY="327.0" prefHeight="36.0" prefWidth="200.0" text="Remeber Me" textFill="#f2efef" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="38.0">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </JFXCheckBox>
             <MaterialDesignIconView fill="#bcb1b1" glyphName="ACCOUNT" layoutX="10.0" layoutY="123.0" size="30.0" wrappingWidth="35.0" />
             <MaterialDesignIconView fill="#bcb1b1" glyphName="LOCK" layoutX="10.0" layoutY="202.0" size="30.0" wrappingWidth="35.0" />
             <ImageView fx:id="progress" fitHeight="72.0" fitWidth="69.0" layoutX="117.0" layoutY="355.0" pickOnBounds="true" preserveRatio="true">
@@ -64,7 +58,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <JFXButton fx:id="signIn" layoutX="69.0" layoutY="196.0" onAction="#handleOnAction" prefHeight="36.0" prefWidth="221.0" style="-fx-background-color: #e45652; -fx-border-color: #a0a2ab;" text="Sign Up" textFill="#dacfcf" AnchorPane.leftAnchor="69.0">
+            <JFXButton fx:id="signIn" layoutX="69.0" layoutY="196.0" onAction="#handleOnAction" prefHeight="36.0" prefWidth="221.0" stylesheets="@buttonHover.css" text="Sign Up" textFill="WHITE" AnchorPane.leftAnchor="69.0">
                <font>
                   <Font size="15.0" />
                </font>

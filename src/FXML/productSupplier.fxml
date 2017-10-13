@@ -22,7 +22,7 @@
                         <AnchorPane />
                      </children>
                   </AnchorPane>
-                  <TableView fx:id="suppTable" layoutX="9.0" layoutY="5.0" prefHeight="486.0" prefWidth="575.0" style="-fx-border-color: #a0a2ab;" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="5.0">
+                  <TableView fx:id="suppTable" layoutX="9.0" layoutY="5.0" prefHeight="486.0" prefWidth="575.0" style="-fx-border-color: #a0a2ab;" stylesheets="@tableCss.css" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="5.0">
                      <columns>
                         <TableColumn fx:id="sId" prefWidth="96.0" text="ID" />
                         <TableColumn fx:id="sFname" prefWidth="182.99996948242188" text="First Name" />
@@ -62,7 +62,7 @@
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <Label layoutX="14.0" layoutY="166.0" prefHeight="23.0" prefWidth="77.0" text="Last Name" textFill="#546e7a">
+                  <Label layoutX="14.0" layoutY="166.0" prefHeight="25.0" prefWidth="120.0" text="Company Name" textFill="#546e7a">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -77,9 +77,9 @@
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <JFXButton fx:id="add" layoutX="15.0" layoutY="414.0" onAction="#onAction" prefHeight="35.0" prefWidth="189.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #1565C0;" text="Add" textFill="#757575" />
-                  <JFXButton fx:id="delete" layoutX="15.0" layoutY="461.0" onAction="#onAction" prefHeight="35.0" prefWidth="190.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #1565C0;" text="Delete" textFill="#757575" />
-                  <JFXButton fx:id="update" layoutX="15.0" layoutY="512.0" onAction="#onAction" prefHeight="35.0" prefWidth="190.0" style="-fx-background-color: #B3E5FC; -fx-border-color: #1565C0;" text="Update" textFill="#757575" />
+                  <JFXButton fx:id="add" layoutX="15.0" layoutY="414.0" onAction="#onAction" prefHeight="35.0" prefWidth="189.0" stylesheets="@posCss.css" text="Add" textFill="#757575" />
+                  <JFXButton fx:id="delete" layoutX="15.0" layoutY="461.0" onAction="#onAction" prefHeight="35.0" prefWidth="190.0" stylesheets="@posCss.css" text="Delete" textFill="#757575" />
+                  <JFXButton fx:id="update" layoutX="15.0" layoutY="512.0" onAction="#onAction" prefHeight="35.0" prefWidth="190.0" stylesheets="@posCss.css" text="Update" textFill="#757575" />
                   <JFXTextField fx:id="id" focusColor="#546e7a" layoutX="13.0" layoutY="38.0" prefHeight="33.0" prefWidth="194.0" unFocusColor="#b3dff2">
                      <font>
                         <Font size="16.0" />

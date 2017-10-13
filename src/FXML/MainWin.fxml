@@ -12,36 +12,36 @@
       <AnchorPane layoutY="554.0" prefHeight="43.0" prefWidth="836.0" style="-fx-background-color: #29B6F6;" />
       <AnchorPane layoutY="132.0" prefHeight="415.0" prefWidth="836.0" style="-fx-background-color: #eeeeee;">
          <children>
-            <JFXButton fx:id="pos" alignment="TOP_LEFT" buttonType="RAISED" layoutX="21.0" layoutY="30.0" onAction="#handleButton" prefHeight="132.0" prefWidth="230.0" ripplerFill="#1b6cd6" style="-fx-background-color: #eeeeee;" stylesheets="@FXML.css" text="POS" textFill="#757575">
+            <JFXButton fx:id="pos" alignment="TOP_LEFT" buttonType="RAISED" layoutX="21.0" layoutY="30.0" onAction="#handleButton" prefHeight="132.0" prefWidth="230.0" ripplerFill="#1b6cd6" stylesheets="@cssForGlyphIcons.css" text="POS" textFill="#757575">
                <font>
                   <Font size="20.0" />
                </font></JFXButton>
             <MaterialDesignIconView fill="#537bff" glyphName="MONITOR" layoutX="43.0" layoutY="149.0" size="30.0" wrappingWidth="34.0" />
-            <JFXButton fx:id="category" alignment="TOP_LEFT" buttonType="RAISED" layoutX="308.0" layoutY="30.0" onAction="#handleButton" prefHeight="132.0" prefWidth="230.0" ripplerFill="#1b6cd6" style="-fx-background-color: #eeeeee;" stylesheets="@FXML.css" text="Category" textFill="#757575">
+            <JFXButton fx:id="category" alignment="TOP_LEFT" buttonType="RAISED" layoutX="308.0" layoutY="30.0" onAction="#handleButton" prefHeight="132.0" prefWidth="230.0" ripplerFill="#1b6cd6" stylesheets="@cssForGlyphIcons.css" text="Category" textFill="#757575">
                <font>
                   <Font size="20.0" />
                </font>
             </JFXButton>
-            <MaterialDesignIconView fill="#537bff" glyphName="VIEW_LIST" layoutX="329.0" layoutY="151.0" size="30.0" text="" wrappingWidth="34.0" />
-            <JFXButton fx:id="product" alignment="TOP_LEFT" buttonType="RAISED" layoutX="589.0" layoutY="30.0" onAction="#handleButton" prefHeight="132.0" prefWidth="230.0" ripplerFill="#1b6cd6" style="-fx-background-color: #eeeeee;" stylesheets="@FXML.css" text="Product" textFill="#757575">
+            <MaterialDesignIconView fill="#5b7eff" glyphName="VIEW_LIST" layoutX="329.0" layoutY="151.0" size="30.0" text="" wrappingWidth="34.0" />
+            <JFXButton fx:id="product" alignment="TOP_LEFT" buttonType="RAISED" layoutX="589.0" layoutY="30.0" onAction="#handleButton" prefHeight="132.0" prefWidth="230.0" ripplerFill="#1b6cd6" stylesheets="@cssForGlyphIcons.css" text="Product" textFill="#757575">
                <font>
                   <Font size="20.0" />
                </font>
             </JFXButton>
             <FontAwesomeIconView fill="#537bff" glyphName="SHOPPING_BASKET" layoutX="613.0" layoutY="149.0" size="30.0" />
-            <JFXButton fx:id="dsr" alignment="TOP_LEFT" buttonType="RAISED" layoutX="21.0" layoutY="230.0" onAction="#handleButton" prefHeight="132.0" prefWidth="230.0" ripplerFill="#1b6cd6" style="-fx-background-color: #eeeeee;" stylesheets="@FXML.css" text="Daily Sales Report" textFill="#757575">
+            <JFXButton fx:id="dsr" alignment="TOP_LEFT" buttonType="RAISED" layoutX="21.0" layoutY="230.0" onAction="#handleButton" prefHeight="132.0" prefWidth="230.0" ripplerFill="#1b6cd6" stylesheets="@cssForGlyphIcons.css" text="Daily Sales Report" textFill="#757575">
                <font>
                   <Font size="20.0" />
                </font>
             </JFXButton>
             <FontAwesomeIconView fill="#537bff" glyphName="BAR_CHART" layoutX="43.0" layoutY="349.0" size="30.0" text="" />
-            <JFXButton fx:id="sr" alignment="TOP_LEFT" buttonType="RAISED" layoutX="308.0" layoutY="230.0" onAction="#handleButton" prefHeight="132.0" prefWidth="230.0" ripplerFill="#1b6cd6" style="-fx-background-color: #eeeeee;" stylesheets="@FXML.css" text="Stocks Report" textFill="#757575">
+            <JFXButton fx:id="sr" alignment="TOP_LEFT" buttonType="RAISED" layoutX="308.0" layoutY="230.0" onAction="#handleButton" prefHeight="132.0" prefWidth="230.0" ripplerFill="#1b6cd6" stylesheets="@cssForGlyphIcons.css" text="Stocks Report" textFill="#757575">
                <font>
                   <Font size="20.0" />
                </font>
             </JFXButton>
             <MaterialDesignIconView fill="#537bff" glyphName="DOMAIN" layoutX="331.0" layoutY="349.0" size="30.0" />
-            <JFXButton fx:id="settings" alignment="TOP_LEFT" buttonType="RAISED" layoutX="589.0" layoutY="230.0" onAction="#handleButton" prefHeight="132.0" prefWidth="230.0" ripplerFill="#1b6cd6" style="-fx-background-color: #eeeeee;" stylesheets="@FXML.css" text="Settings" textFill="#757575">
+            <JFXButton fx:id="inventory" alignment="TOP_LEFT" buttonType="RAISED" layoutX="589.0" layoutY="230.0" onAction="#handleButton" prefHeight="132.0" prefWidth="230.0" ripplerFill="#1b6cd6" stylesheets="@cssForGlyphIcons.css" text="Inventory" textFill="#757575">
                <font>
                   <Font size="20.0" />
                </font>

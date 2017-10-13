@@ -14,9 +14,9 @@
 
 <AnchorPane id="AnchorPane" prefHeight="576.0" prefWidth="719.0" style="-fx-background-color: #F5F5F5;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ProductUpdateController">
    <children>
-      <Label layoutX="25.0" layoutY="14.0" text="Products Details">
+      <Label layoutX="25.0" layoutY="14.0" text="UPDATE PRODUCT" underline="true">
          <font>
-            <Font size="24.0" />
+            <Font size="32.0" />
          </font>
       </Label>
       <MaterialDesignIconView fx:id="close" fill="#5b4040" glyphName="CLOSE" layoutX="675.0" layoutY="40.0" onMouseClicked="#closeStage" size="30.0" />

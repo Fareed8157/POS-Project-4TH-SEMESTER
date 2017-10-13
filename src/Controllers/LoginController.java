@@ -54,9 +54,7 @@ public class LoginController implements Initializable{
 
     @FXML
     private JFXComboBox<String> empNo;
-//    @FXML
-//    private JFXTextField empNo;
-
+    
     @FXML
     private JFXPasswordField upass;
 
@@ -65,9 +63,6 @@ public class LoginController implements Initializable{
 
     @FXML
     private JFXButton forgotPass;
-
-    @FXML
-    private JFXCheckBox checkBox;
 
     @FXML
     private ImageView progress;
@@ -100,10 +95,7 @@ public class LoginController implements Initializable{
     void handleOnAction(ActionEvent event) throws IOException {
         
         final Parent root1=FXMLLoader.load(getClass().getResource("/FXML/MainWin.fxml"));
-        
-        
         if(event.getSource()==login){
-            
             if(loginFun()){
             progress.setVisible(true);
             PauseTransition pt=new PauseTransition();
@@ -128,6 +120,14 @@ public class LoginController implements Initializable{
             signUpStage.setScene(sc);
             signUpStage.show();
             signUpStage.setResizable(false)  ;            
+        }else if(event.getSource()==forgotPass){
+            System.out.println("Inside ForgotPass");
+            Stage signUpStage=new Stage();
+            Parent root=FXMLLoader.load(getClass().getResource("/FXML/forgotPassword.fxml"));
+            Scene sc=new Scene(root);
+            signUpStage.setScene(sc);
+            signUpStage.show();
+            signUpStage.setResizable(false)  ; 
         }
     }
 
@@ -142,9 +142,6 @@ public class LoginController implements Initializable{
         progress.setVisible(false);
         empNo.setStyle("-fx-text-inner-color: #ffffff;");
         upass.setStyle("-fx-text-inner-color: #ffffff;");
-//    empNo.textProperty().addListener((observable,oldVal,newVal)->{
-//        System.out.println(newVal.toString());
-//    });
     rightOrWrong.setVisible(false);
     upass.setOnAction((actionEvent)->{
         System.out.println(upass.getText());
@@ -216,24 +213,7 @@ public class LoginController implements Initializable{
         String pas=user.getPass();
         Integer id=user.getId();
         String content = id+"/"+name+"/"+pas;
-//        BufferedWriter bw = null;
-//        FileWriter fw = null;
-//        System.out.println(user.getId()+"="+user.getPass());
-//       String content = id+"/"+name+"/"+pas;
-//       String[] ar=content.split("/");
-//       
-//       try {
-//        fw = new FileWriter(FILENAME);
-//        bw = new BufferedWriter(fw);
-//        bw.write(content);
-////        for(String data: ar){
-////        bw.write(data);  
-////        bw.newLine();
-////        }//end of loop
-//        } catch (IOException ex) {
-//            System.out.println(ex.toString());
-//        }
-    BufferedWriter f = null;
+       BufferedWriter f = null;
         try {
             f = new BufferedWriter(new FileWriter("G:\\UserDetails.txt"));
             f.write(content);

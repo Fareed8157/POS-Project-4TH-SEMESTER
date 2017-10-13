@@ -8,13 +8,17 @@ package Controllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXRadioButton;
+import com.jfoenix.controls.JFXTextField;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -28,10 +32,13 @@ public class StocksReportController implements Initializable{
     private JFXDatePicker selectedDate;
 
     @FXML
-    private JFXRadioButton userWise;
+    private ToggleGroup stockType;
+    
+    @FXML
+    private JFXRadioButton stocksOut;
 
     @FXML
-    private JFXRadioButton invoiceWise;
+    private JFXRadioButton stocksIn;
 
     @FXML
     private JFXButton loadReport;
@@ -53,12 +60,42 @@ public class StocksReportController implements Initializable{
     
     @FXML
     void onAction(ActionEvent event) {
-
+        if(event.getSource()==loadReport){
+            if(!(((JFXTextField)selectedDate.getEditor()).getText().isEmpty()) && 
+                    !(((JFXTextField)selectedDate1.getEditor()).getText().isEmpty())){
+                loadReport();
+            }
+        }else if(event.getSource()==cancel){
+            Stage win=(Stage)cancel.getScene().getWindow();
+            win.close();
+        }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        stocksIn.setSelected(true);
+        stocksIn.setToggleGroup(stockType);
+        stocksOut.setToggleGroup(stockType);
+    }
 
+    private void loadReport() {
+        LocalDate fromDate=selectedDate.getValue();
+        LocalDate toDate=selectedDate1.getValue();
+        if(stocksIn.isSelected()){
+            String qu="";
+            HashMap<String,Object> hm=new HashMap<>();
+            hm.put("fromDate",fromDate.toString());
+            hm.put("toDate",toDate.toString());
+            PrintReport pr=new PrintReport(qu,hm);
+            pr.showReport("stocksIn");
+        }else{
+             String qu="";
+            HashMap<String,Object> hm=new HashMap<>();
+            hm.put("fromDate",fromDate.toString());
+            hm.put("toDate",toDate.toString());
+            PrintReport pr=new PrintReport(qu,hm);
+            pr.showReport("stocksOut");
+        }
     }
     
 }

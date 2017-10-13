@@ -29,8 +29,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -118,30 +121,30 @@ public class posController implements Initializable{
 
     @FXML
     private FontAwesomeIconView close;
-    
+    ArrayList<Integer> oldStockOut=new ArrayList<Integer>();
+    ArrayList<Integer> oldAvail=new ArrayList<Integer>();
+    ArrayList<Integer> arr;
+    Integer oldProSum=0;
+    Integer newProSum=0;
     Integer subSum=null;
     JFXTextField am;
     JFXComboBox<String> delOrPrint;
     String userName="";
-    Integer grandSum=null;
-    Integer recieved=null;
-    Long returned=null;
-    Integer rcvd=null;
-    Integer retnd=null;
-    Integer  n =null;
+    Integer grandSum=0;
+    Integer recieved=0;
+    Integer returned=0;
+    Integer rcvd=0;
+    Integer retnd=0;
+    Integer nv1=0;
+    Integer  n =0;
+    Integer newSubAndGrandSum=0;
+    Integer totalOfProductPrice=0;
     public static Integer invoiceNo;
-//    SimpleIntegerProperty invNo=new SimpleIntegerProperty();
-//    SimpleIntegerProperty tItem=new SimpleIntegerProperty();
-//    SimpleIntegerProperty subTotal=new SimpleIntegerProperty();
-//    SimpleIntegerProperty tax=new SimpleIntegerProperty();
-//    SimpleIntegerProperty grandTotal=new SimpleIntegerProperty();
-    SimpleLongProperty invNo=new SimpleLongProperty();
-    SimpleLongProperty tItem=new SimpleLongProperty();
-    SimpleLongProperty subTotal=new SimpleLongProperty();
-   
-    SimpleLongProperty grandTotal=new SimpleLongProperty();
-    
-    JFXButton printIn;
+    SimpleLongProperty invNo=null;
+    SimpleLongProperty tItem=null;
+    SimpleLongProperty subTotal=null;
+    SimpleLongProperty grandTotal=null;
+    JFXButton printIn=null;
     ObservableList<Sale> tableItems=FXCollections.observableArrayList();
     ObservableList<String> chooseTypeList=FXCollections.observableArrayList();
     ObservableList<Sale> invoiceList=FXCollections.observableArrayList();
@@ -149,7 +152,17 @@ public class posController implements Initializable{
     ObservableList<Sale> saleList=FXCollections.observableArrayList();
     ObservableList<Sale> selectedRows,allProducts;
     private List<Sale> items;
+    private List<Sale> invoiceDelList;
     Configs con;
+    Stage win=null;
+    public posController() {
+    invNo=new SimpleLongProperty(0);
+    tItem=new SimpleLongProperty(0);
+    grandTotal=new SimpleLongProperty(0);
+    subTotal=new SimpleLongProperty(0);
+    System.out.println("Subtotal=="+subTotal.get());
+    this.arr = new ArrayList<Integer>();
+    }
     @FXML
     void closeStage(MouseEvent event) {
        Stage stage=(Stage)close.getScene().getWindow();
@@ -159,7 +172,8 @@ public class posController implements Initializable{
     @FXML
     void onAction(ActionEvent event) throws SQLException, IOException {
         if(event.getSource()==printInvoice){
-           if(!(saleList.isEmpty())){
+            if(chooseType.getValue()!="Edit Invoice"){
+            if(!(saleList.isEmpty())){
             Label amount=new Label("Amount");
             amount.setStyle("-fx-font-size: 1em; ");
             am=new JFXTextField();
@@ -170,64 +184,159 @@ public class posController implements Initializable{
             grid.setHgap(20);
             GridPane.setConstraints(amount, 0, 0);
             GridPane.setConstraints(am, 1, 0);
-            JFXButton printIn=new JFXButton("Print");
+            printIn=new JFXButton("Print");
+            printIn.setOnAction(e->{
+                System.out.println("Inside SetOn");
+            if(!(am.getText().isEmpty())){
+                if(amountValidation()){
+                System.out.println("Inside SetOn");
+                    String qu="";
+                    recieved=Integer.valueOf(am.getText());
+                    int in=(int)invNo.get();
+                    returned=(int) (long)grandTotal.get();
+                    if(recieved>=returned){
+                    if(saveInvoiceDetails()){
+                    HashMap<String,Object> hm=new HashMap<>();
+                    hm.put("invoiceId",in);
+                    hm.put("cashier",userName);
+                    hm.put("rcvd",recieved);
+                    hm.put("returned",returned);
+                    PrintReport pr=new PrintReport(qu,hm);
+                    pr.showReport("invoice");
+                    infoMessage("Printed");
+                    win.close();
+                    saveStockOutIn();
+                    oldProSum=0;
+                    for(Sale s: posTable.getItems()){
+                     oldProSum+=Integer.valueOf(s.getQt());
+                    }
+                    tItem.set(0);
+                    subTotal.set(0);
+                    grandTotal.set(0);
+                    saleList.clear();
+                    invoiceNo=getNextInvoiceId();
+                    int temp=++invoiceNo;
+                    invNo.set(temp);
+                        }
+                   }else{
+                     errorMessage("Amount Entered Is less Than Grand Total");
+                    }
+                }//end of inner if
+                
+             }else{
+                errorMessage("Fill the Field");
+            }
+            });
+            printIn.setStyle("-fx-border-color: #ff0000; -fx-border-color: #B3E5FC; -fx-border-width: 5px; -fx-font-size: 1em;");
+            printIn.setPrefWidth(150);
+            printIn.setPrefHeight(40);
+            GridPane.setConstraints(printIn, 1, 2);
+            grid.getChildren().addAll(amount,am,printIn);
+            Scene sc=new Scene(grid,400,300);
+            win=new Stage();
+            win.setScene(sc);
+            win.showAndWait();  
+            }//end of inner most if
+           else
+               errorMessage("No Products");   
+        }else{                              //when we edit invoice
+            if(!(invoiceList.isEmpty())){
+            Label amount=new Label("Amount");
+            amount.setStyle("-fx-font-size: 1em; ");
+            am=new JFXTextField();
+            newProSum=0;
+            for(Sale s: posTable.getItems()){
+            newProSum+=Integer.valueOf(s.getQt());
+            }
+            if(newProSum<oldProSum)
+             am.setPromptText("Enter The Amount To be Returned");  
+            else
+            am.setPromptText("Amount to Pay");
+            am.setLabelFloat(true);
+            GridPane grid=new GridPane();
+            grid.setPadding(new Insets(40,40,40,40));
+            grid.setVgap(16);
+            grid.setHgap(20);
+            GridPane.setConstraints(amount, 0, 0);
+            GridPane.setConstraints(am, 1, 0);
+            printIn=new JFXButton("Print");
+            printIn.setOnAction(e->{
+          if(!(am.getText().isEmpty())){
+            if(amountValidation()){
+                String qu="";
+          recieved=Integer.valueOf(am.getText().trim());
+          changeInDbForExistingInvoice();
+          int in=(int)invNo.get();
+          HashMap<String,Object> hm=new HashMap<>();
+          hm.put("invoiceId",in);
+          if(newProSum<oldProSum){
+           hm.put("rcvd",rcvd);
+          hm.put("returned",retnd);   
+          }else{
+          hm.put("rcvd",recieved);
+          hm.put("returned",returned);    
+          }
+          hm.put("cashier",userName);
+          PrintReport pr=new PrintReport(qu,hm);
+          pr.showReport("invoice");
+          infoMessage("Printed");
+          win.close();
+          saveStockOutIn();
+          tItem.set(0);
+          subTotal.set(0);
+          grandTotal.set(0);
+         invoiceList.clear();   
+            }//end of inner if
+     
+          }//end of outer if
+        });
             printIn.setStyle("-fx-border-color: #ff0000; -fx-border-color: #B3E5FC; -fx-border-width: 5px; -fx-font-size: 1em;");
             //printIn.setStyle("-fx-font-size: 1em; ");
             printIn.setPrefWidth(150);
             printIn.setPrefHeight(40);
-          //printIn.getGraphic().setStyle("-fx-background-color: #B3E5FC;");
             GridPane.setConstraints(printIn, 1, 2);
-            printIn.setOnAction(e->{
-            if(!(am.getText().isEmpty())){
-                    String qu="";
-                    String un=userName;
-                    int in=(int)invNo.get();
-                    if(saveInvoiceDetails()){
-                    HashMap<String,Object> hm=new HashMap<>();
-                    System.out.println("invoiceID="+in);
-                    System.out.println("UserName="+un);
-                    hm.put("invoiceId",in);
-                    hm.put("cashier",un);
-                    hm.put("rcvd",recieved);
-                    hm.put("returned",returned);
-                    PrintReport pr=new PrintReport(qu,hm);
-                    pr.showReport();
-                    infoMessage("Printed");
-                }
+        grid.getChildren().addAll(amount,am,printIn);
+        Scene sc=new Scene(grid,400,300);
+        Stage win=new Stage();
+        win.setScene(sc);
+        win.showAndWait();
+        }//end of outer most if
+        else
+            errorMessage("No Products");   
+        }//end of outer else
+      }//end of print button
+        else if(event.getSource()==deletItem){
+          if(chooseType.getValue()!="Edit Invoice"){
+          allProducts=posTable.getItems();
+          items =  new ArrayList (posTable.getSelectionModel().getSelectedItems());
+          Alert a1= new Alert(Alert.AlertType.CONFIRMATION);
+          a1.setTitle("Confirmation Dialog");
+          a1.setContentText("Are Sure Want to Delete ?");
+          a1.setHeaderText(null);
+          Optional<ButtonType> action=a1.showAndWait();
+          if(action.get()==ButtonType.OK){
+            for(Sale sa: items){
+            subSum=subSum-sa.getUnitPrice();
+            grandSum=grandSum-sa.getUnitPrice();
+            subTotal.set(subSum);
+            grandTotal.set(subSum);
+            posTable.getItems().remove(sa);
             }
-            });
-            grid.getChildren().addAll(amount,am,printIn);
-            Scene sc=new Scene(grid,400,300);
-            Stage win=new Stage();
-            win.setScene(sc);
-            win.showAndWait();
-            }//end of inner most if
-           else
-               errorMessage("No Products");
-        }else if(event.getSource()==deletItem){
-           allProducts=posTable.getItems();
-            items =  new ArrayList (posTable.getSelectionModel().getSelectedItems());
-            System.out.println("size befre delt=="+saleList.size());
-            Sale sa=posTable.getSelectionModel().getSelectedItem();
-            Alert a1= new Alert(Alert.AlertType.CONFIRMATION);
-            a1.setTitle("Confirmation Dialog");
-            a1.setContentText("Are Sure Want to Delete ?");
-            a1.setHeaderText(null);
-            Optional<ButtonType> action=a1.showAndWait();
-            //win.initModality(Modality.WINDOW_MODAL);
-            if(action.get()==ButtonType.OK){
-                subTotal.set((subSum-sa.getUnitPrice()));
-                grandTotal.set((grandSum-sa.getUnitPrice()));
-                posTable.getItems().remove(sa);
-                tItem.set(saleList.size());
-                System.out.println("size after delt=="+saleList.size());
+            tItem.set(saleList.size());
             }
+          }
+          else{
+              System.out.println("In del invoice");
+              deleteProductsFromInvoice();
+          }    
+          
         }else if(event.getSource()==clear){
             tItem.set(0);
             subTotal.set(0);
             grandTotal.set(0);
             saleList.clear();
             Integer invoiceValueCheck=getNextInvoiceId();
+            invoiceValueCheck++;
             invNo.set(invoiceValueCheck);
             if(invoiceValueCheck==null){
                 errorMessage("Enter Products into Cart");
@@ -238,16 +347,7 @@ public class posController implements Initializable{
          Parent root=FXMLLoader.load(getClass().getResource("/FXML/RePrintInvoiceAndDel.fxml"));           
             sc=new Scene(root);
             win.setScene(sc);
-            win.show();
-//            String mydate="2017/09/15";
-//            Date today = new Date(mydate);
-//            SimpleDateFormat tsdf = new SimpleDateFormat("yyyy-MM-dd");
-//            try{
-//                System.out.println(tsdf.format(today));
-//            }
-//            catch (Exception e){
-//                System.out.println("Error occurred" + e.getMessage());
-//            }          
+            win.show();   
          }else{
             closeButton.getScene().getWindow().hide();
         }
@@ -256,12 +356,10 @@ public class posController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         con=Configs.getInstance();
-        //invoiceNoLabel.setText(invoiceNo.toString());
         chooseTypeList.addAll("Edit Invoice","New Transaction");
         chooseType.getItems().addAll(chooseTypeList);
         chooseType.setValue("New Transaction");
         invoiceNo=getNextInvoiceId();
-        
         int temp=++invoiceNo;
         invNo.set(temp);
         System.out.println("temp=="+invNo.get());
@@ -271,13 +369,24 @@ public class posController implements Initializable{
                 clear.setDisable(true);
                 search.setPromptText("Enter Invoice No");
                 saleList.clear();
+                subTotal.set(0);
+                grandTotal.set(0);
+                tItem.set(0);
                 invNo.set(0);
+                search.clear();
+                
             }else{
                 invoiceList.clear();
                 invNo.set(temp);
+                subTotal.set(0);
+                grandTotal.set(0);
+                tItem.set(0);
                 reprintInvoice.setDisable(false);
                 clear.setDisable(false);
                 search.setPromptText("Barcode");
+                search.clear();
+                invoiceNo=getNextInvoiceId();
+                invNo.set(temp);
             }
         });
         subSum=new Integer(0);
@@ -287,11 +396,8 @@ public class posController implements Initializable{
         invoiceNoLabel.textProperty().bind(invNo.asString());
         itemNoLabel.textProperty().bind(tItem.asString());
         subTotalLabel.textProperty().bind(subTotal.asString());
-       
         grandTotalLab.textProperty().bind(grandTotal.asString());
         posTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        //invNo.set(invoiceNo);
-        
         Callback<TableColumn<Sale, String>, TableCell<Sale, String>> cellFactory
                 = (TableColumn<Sale, String> param) -> new EditingCell();
         id.setCellValueFactory(cellData->cellData.getValue().barCodeProperty());
@@ -306,19 +412,35 @@ public class posController implements Initializable{
                     Sale sp=t.getTableView().getItems().get(t.getTablePosition().getRow());
                     if(chooseType.getValue()=="Edit Invoice"){
                         changeDetailsOfExistingProduct(sp,t.getNewValue());
+                        nv1=Integer.valueOf(t.getNewValue());
                     }else{
-                        changeDetailsOfProduct(t.getNewValue());
+                        changeDetailsOfProduct(t.getNewValue().trim());
                     }
-                    
                     sp.setQt(t.getNewValue());
                         //updateCellValue(t,"1");
                    });
         search.textProperty().addListener((observable,oldVal,newVal)->{
             if(chooseType.getValue()=="Edit Invoice"){
-                invNo.set(Integer.valueOf(newVal.toString()));
-                findInvoice(newVal.toString());
-            }else
-                findProduct(newVal.toString());
+                if(newVal.isEmpty()){
+                invoiceList.clear();
+                subTotal.set(0);
+                grandTotal.set(0);
+                tItem.set(0);
+                invNo.set(Integer.valueOf(0));
+                }else{
+                invNo.set(Integer.valueOf(newVal));
+                System.out.println("inv="+newVal);
+                findInvoice(newVal);
+                oldProSum=0;
+                for(Sale s: posTable.getItems()){
+                oldProSum+=Integer.valueOf(s.getQt());
+                }
+                }
+                
+            }else{
+                findProduct(newVal);
+            }
+            
         });
         
     }
@@ -335,9 +457,9 @@ public class posController implements Initializable{
                String pd=rs.getString("PDescription");
                Integer up=rs.getInt("unitPrice");
                String so="1";
+                System.out.println("up=="+up);
                sale=new Sale(bc,pname,pd,so,up);
                sList.add(sale);
-               //posTable.setItems(sList);
             }
         } catch (SQLException ex) {
             System.out.println(ex.toString());
@@ -363,28 +485,15 @@ public class posController implements Initializable{
            posTable.setItems(saleList);
   }
 
-//    private void removeRecords(List<Sale> sa) {
-//        for(int i=0; i<sa.size(); i++){
-//            saleList.remove()
-//            if(con.execAction(qu)){
-//                System.out.println("Executed");
-//             }
-//        }
-//        allProducts.removeAll(sa);
-//    }
-    private boolean saveInvoiceDetails() {
+  private boolean saveInvoiceDetails() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         Integer uId=getUid();
-        //System.out.println(dateFormat.format(date));
-        //int a=invoiceNo++;
-        //invNo.set( a);
-        returned=grandTotal.get();
+        returned=(int) (long)grandTotal.get();
         returned-=recieved;
         String qu="INSERT INTO invoice(InvoiceID,invoiceDateTime,uId,rcvdAmount,returnedAmount) VALUES("+invNo.get()+",'"+dateFormat.format(date)+"',"+uId+","+recieved+","+returned+")";
         if(con.execAction(qu)){
-            //infoMessage("Invoice Generated");
-            if(saveDetailsIntoInvoiceProduct(invNo.get()))
+             if(saveDetailsIntoInvoiceProduct(invNo.get()))
                 return true;
             System.out.println("Saved");
         }
@@ -394,22 +503,18 @@ public class posController implements Initializable{
     private Integer getUid() {
         String sCurrentLine="";
         Integer val=null;
-       // String[] ar=null;
         String FILENAME="G:\\UserDetails.txt";
         BufferedReader br = null;
 	FileReader fr = null;
         try {
             fr = new FileReader(FILENAME);
             br = new BufferedReader(fr);
-            //String value=br.readLine();
-            //ar=(sCurrentLine = br.readLine()).split("/");
             String[] ar=(sCurrentLine = br.readLine()).split("/");
             val=Integer.valueOf(ar[0]);
             userName=ar[1];
             System.out.println(ar[1]);
             System.out.println("My nO"+val);
             return val;
-           
         } catch (FileNotFoundException ex) {
            System.out.println(ex.toString());
         } catch (IOException ex) {
@@ -459,13 +564,17 @@ public class posController implements Initializable{
 
     private void changeDetailsOfProduct(String newValue) {
         System.out.println("newvalue=="+newValue);
-                    
-                    subSum=Integer.valueOf(newValue)*subSum;
-                    grandSum=Integer.valueOf(newValue)*grandSum;
+                    Sale sal=posTable.getSelectionModel().getSelectedItem();
+                    Integer upForChange=sal.getUnitPrice();
+                    Integer oldQt=Integer.valueOf(sal.getQt());
+                    Integer newQt=Integer.valueOf(newValue.trim());
+                    newQt-=oldQt;
+                    Integer sumTemp=(newQt)*upForChange;
+                    subSum+=sumTemp;
                     subTotal.set(subSum);
-                    grandTotal.set(grandSum);
+                    grandTotal.set(subSum);
                     
-    }
+        }
 
     private Integer getNextInvoiceId() {
         String qu="SELECT max(InvoiceID) as id from invoice";
@@ -473,10 +582,9 @@ public class posController implements Initializable{
         ResultSet rs=con.execQuery(qu);
          try {
             
-              if (rs.next())
+            if (rs.next())
                 lastId=rs.getInt("id");
              System.out.println(lastId);
-            //invNo.set(lastId);
             return lastId++;
         } catch (SQLException ex) {
             System.out.println(ex.toString());
@@ -513,11 +621,12 @@ public class posController implements Initializable{
         hm.put("rcvd",rc);
         hm.put("returned",ret);
         PrintReport pr=new PrintReport(qu,hm);
-        pr.showReport();
+        pr.showReport("invoice");
     }
 
     private void findInvoice(String inv) {
         invoiceList.clear();
+        System.out.println("inv="+inv);
         String qu="select p.BarCode, p.ProductName,p.PDescription,pro.Quantity,p.unitPrice,(select sum(pro.Quantity) from productinvoice pro inner join invoice i \n" +
         "on(i.InvoiceID=pro.InvoiceID) where i.InvoiceID="+Integer.valueOf(inv.trim())+") as totalItem,i.InvoiceID id,sum(( select sum(pro.Quantity*p.unitPrice) from user u\n" +
         " inner join invoice i on(u.uId=i.uId) \n" +
@@ -530,16 +639,19 @@ public class posController implements Initializable{
         "group by i.InvoiceID,p.BarCode\n" +
         "having id="+Integer.valueOf(inv.trim());
         ResultSet rs=con.execQuery(qu);
-        Integer pCode=null;
+        System.out.println(qu);
+        Integer pCode=0;
         String pname="";
         String pDesc="";
-        Integer up=null;
-        Integer qty=null;
-        Integer tItm=null;
-        Integer gSum=null;
+        Integer up=0;
+        Integer qty=0;
+        Integer tItm=0;
+        Integer gSum=0;
+        int i=0;
         try {
             while(rs.next()){
-               
+                System.out.println("Size of i="+i);
+                i++;
                 pCode=rs.getInt(1);
                 pname=rs.getString(2);
                 pDesc=rs.getString(3);
@@ -551,36 +663,248 @@ public class posController implements Initializable{
                 retnd=rs.getInt(10);
                 Sale sal=new Sale(pCode.toString(),pname,pDesc,qty.toString(),up);
                 invoiceList.add(sal);
+                System.out.println("Size of list="+invoiceList.size());
+                System.out.println("Inside Whil");
+                System.out.println("Inside Whil=="+gSum);
             }
+             System.out.println("Out Whil=="+gSum);
             subTotal.set(gSum);
             grandTotal.set(gSum);
             tItem.set(tItm);
             posTable.setItems(invoiceList);
+            
         } catch (SQLException ex) {
             System.out.println(ex.toString());
         }
         
     }
 
+  
     private void changeDetailsOfExistingProduct(Sale sp,String nv) {
+        Sale sal=posTable.getSelectionModel().getSelectedItem();
         String qu="UPDATE productinvoice SET Quantity="+Integer.valueOf(nv)
-                + "where InvoiceID="+invNo.get()+" and BarCode="+Integer.valueOf(sp.getBarCode());
+                + " where InvoiceID="+invNo.get()+" and BarCode="+Integer.valueOf(sp.getBarCode());
         if(con.execAction(qu)){
-            Long oldGtotal=grandTotal.get();
-            Long sbTotal=Long.valueOf(nv)*sp.getUnitPrice();
-            Long newGtotal=oldGtotal;
-            newGtotal+=sbTotal;
-            if(newGtotal<=rcvd){
-                retnd=(int)((long)sbTotal)+retnd;
-            }else{
-                
-            }
+        Integer oldQt=Integer.valueOf(sal.getQt());
+        Integer newQt=Integer.valueOf(nv);
+        newQt-=oldQt;
+        if(newQt<0){
+        newQt=-newQt;
+        newSubAndGrandSum=newQt*sp.getUnitPrice();
+        System.out.println("newSubAndGrandSum="+newSubAndGrandSum);
+        subTotal.set(subTotal.get()-newSubAndGrandSum);
+        grandTotal.set(grandTotal.get()-newSubAndGrandSum);    
+        }else{ 
+        newSubAndGrandSum=newQt*sp.getUnitPrice();
+        subTotal.set(subTotal.get()+newSubAndGrandSum);
+        grandTotal.set(grandTotal.get()+newSubAndGrandSum);  
         }
-        
+        arr.add(newSubAndGrandSum);
+        }
+    }
+    
+    private void changeInDbForExistingInvoice() {
+        for(Integer i :arr){
+            totalOfProductPrice+=i;
+        }
+        String qu1="";
+        rcvd=getRcvdAmount();
+        System.out.println("rcvd="+rcvd);
+        retnd=getRetndAmount();
+        if(newProSum<oldProSum){
+            System.out.println("rcvd="+rcvd);
+            System.out.println("rtnd="+retnd);
+        retnd+=(-totalOfProductPrice);
+        qu1="UPDATE invoice SET rcvdAmount="+rcvd+" ,returnedAmount="+retnd+" Where InvoiceID="+invNo.get();
+        }else{
+        retnd-=(recieved-totalOfProductPrice);
+        recieved+=rcvd;
+        returned=retnd;
+        qu1="UPDATE invoice SET rcvdAmount="+recieved+" ,returnedAmount="+retnd+" Where InvoiceID="+invNo.get();
+        }
+        con.execAction(qu1);
+        totalOfProductPrice=0;
+        arr.clear();
     }
 
+    private Integer getRcvdAmount() {
+        Integer rcd=null;
+        try {
+            String qu="SELECT rcvdAmount FROM invoice WHERE InvoiceID="+invNo.get();
+            ResultSet rs=con.execQuery(qu);
+            rs.next();
+            rcd=rs.getInt("rcvdAmount");
+            return rcd;
+        } catch (SQLException ex) {
+            Logger.getLogger(posController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rcd;
+    }
+
+    private Integer getRetndAmount() {
+        Integer rtnd=null;
+        try {
+            String qu="SELECT returnedAmount FROM invoice WHERE InvoiceID="+invNo.get();
+            ResultSet rs=con.execQuery(qu);
+            rs.next();
+            rtnd=rs.getInt("returnedAmount");
+            return rtnd;
+        } catch (SQLException ex) {
+            Logger.getLogger(posController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rtnd;
+    }
+
+    private void saveStockOutIn() {
+        ArrayList<Integer> a2=new ArrayList<Integer>();
+        ArrayList<Integer> a3=new ArrayList<Integer>();
+        for(Sale l: posTable.getItems()){
+            try {
+                String qu="SELECT availPro,stockOut from products where BarCode="+Integer.valueOf(l.getBarCode());
+                ResultSet rs=con.execQuery(qu);
+                rs.next();
+                Integer t=rs.getInt("availPro");
+                Integer t1=rs.getInt("stockOut");
+                a2.add(t);         //available products
+                a3.add(t1);         //stockOut
+            } catch (SQLException ex) {
+                System.out.println(ex.toString());
+            }
+        }
+        changeInStockInAndStockOut(a2,a3);
+    }
+
+    private void changeInStockInAndStockOut(ArrayList<Integer> a2, ArrayList<Integer> a3) {
+        int i=0;
+        String qu="";
+        for(Sale sl: posTable.getItems()){
+            if(newProSum<oldProSum){
+             qu="UPDATE products set stockOut="+(a3.get(i)-Integer.valueOf(sl.getQt()))+",availPro="+(a2.get(i)+Integer.valueOf(sl.getQt()))+" where BarCode="+Integer.valueOf(sl.getBarCode());
+            }else{
+             qu="UPDATE products set stockOut="+(a3.get(i)+Integer.valueOf(sl.getQt()))+",availPro="+(a2.get(i)-Integer.valueOf(sl.getQt()))+" where BarCode="+Integer.valueOf(sl.getBarCode());
+            }
+           con.execAction(qu);
+           i++;
+        }
+    }
+
+     public void refreshInvoice(){
+        String inv=search.getText();
+       invoiceList.clear();
+        System.out.println("inv="+inv);
+        String qu="select p.BarCode, p.ProductName,p.PDescription,pro.Quantity,p.unitPrice,(select sum(pro.Quantity) from productinvoice pro inner join invoice i \n" +
+        "on(i.InvoiceID=pro.InvoiceID) where i.InvoiceID="+Integer.valueOf(inv.trim())+") as totalItem,i.InvoiceID id,sum(( select sum(pro.Quantity*p.unitPrice) from user u\n" +
+        " inner join invoice i on(u.uId=i.uId) \n" +
+        "inner join productinvoice pro on(i.InvoiceID=pro.InvoiceID) inner join products p\n" +
+        "on(pro.BarCode=p.BarCode) \n" +
+        "group by i.InvoiceID\n" +
+        "having i.InvoiceID="+Integer.valueOf(inv.trim())+")) grandSum,i.rcvdAmount,i.returnedAmount\n" +
+        "from invoice i inner join productinvoice pro on(i.InvoiceID=pro.InvoiceID)\n" +
+        "inner join products p on(pro.BarCode=p.BarCode)\n" +
+        "group by i.InvoiceID,p.BarCode\n" +
+        "having id="+Integer.valueOf(inv.trim());
+        ResultSet rs=con.execQuery(qu);
+        System.out.println(qu);
+        Integer pCode=null;
+        String pname="";
+        String pDesc="";
+        Integer up=0;
+        Integer qty=0;
+        Integer tItm=0;
+        Integer gSum=0;
+        int i=0;
+        try {
+            while(rs.next()){
+                System.out.println("Size of i="+i);
+                i++;
+                pCode=rs.getInt(1);
+                pname=rs.getString(2);
+                pDesc=rs.getString(3);
+                qty=rs.getInt(4);
+                up=rs.getInt(5);
+                tItm=rs.getInt(6);
+                gSum=rs.getInt(8);
+                rcvd=rs.getInt(9);
+                retnd=rs.getInt(10);
+                Sale sal=new Sale(pCode.toString(),pname,pDesc,qty.toString(),up);
+                invoiceList.add(sal);
+                System.out.println("Size of list="+invoiceList.size());
+                System.out.println("Inside Whil");
+                System.out.println("Inside Whil=="+gSum);
+            }
+             System.out.println("Out Whil=="+gSum);
+            subTotal.set(gSum);
+            grandTotal.set(gSum);
+            tItem.set(tItm);
+            posTable.setItems(invoiceList);
+            
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+        }
+         
+    }
+     public void loadOldStkAvail(){
+        ArrayList<Integer> a2=new ArrayList<Integer>();
+        ArrayList<Integer> a3=new ArrayList<Integer>();
+        for(Sale l: posTable.getItems()){
+            try {
+                String qu="SELECT availPro,stockOut from products where BarCode="+Integer.valueOf(l.getBarCode());
+                ResultSet rs=con.execQuery(qu);
+                rs.next();
+                Integer t=rs.getInt("availPro");
+                Integer t1=rs.getInt("stockOut");
+                a2.add(t);         //available products
+                a3.add(t1);         //stockOut
+            } catch (SQLException ex) {
+                System.out.println(ex.toString());
+            }
+        }
+        oldStockOut=a3;
+        oldAvail=a2;
+     }
     
-    class EditingCell extends TableCell<Sale, String> {
+    private void deleteProductsFromInvoice() {
+        System.out.println("Inside delproMethd");
+        Integer sumOfDeletePro=0;
+        String qu="";
+        int i=0;
+          invoiceDelList =  new ArrayList (posTable.getSelectionModel().getSelectedItems());
+          Alert a1= new Alert(Alert.AlertType.CONFIRMATION);
+          a1.setTitle("Confirmation Dialog");
+          a1.setContentText("Are Sure Want to Delete ?");
+          a1.setHeaderText(null);
+          loadOldStkAvail();
+          Optional<ButtonType> action=a1.showAndWait();
+          if(action.get()==ButtonType.OK){
+              System.out.println("Size of posTable="+invoiceDelList.size());
+            for(Sale sa: invoiceDelList){
+            sumOfDeletePro+=Integer.valueOf(sa.getQt())*sa.getUnitPrice();
+            qu="UPDATE products set stockOut="+(oldStockOut.get(i)-Integer.valueOf(sa.getQt()))+",availPro="+(oldAvail.get(i)+Integer.valueOf(sa.getQt()))+" where BarCode="+Integer.valueOf(sa.getBarCode());
+            con.execAction(qu);
+            qu="DELETE from productinvoice where InvoiceID="+invNo.get()+" AND BarCode="+Integer.valueOf(sa.getBarCode());
+            con.execAction(qu);
+            subSum=subSum-sa.getUnitPrice();
+            grandSum=grandSum-sa.getUnitPrice();
+            subTotal.set(subSum);
+            grandTotal.set(grandSum);
+            posTable.getItems().remove(sa);
+            i++;
+            }
+            tItem.set(invoiceList.size());
+            Integer rdAmount=getRetndAmount();
+            System.out.println("SumOfDel="+sumOfDeletePro);
+            System.out.println("rdAmount="+rdAmount);
+            rdAmount+=(-sumOfDeletePro);
+            qu="UPDATE invoice set returnedAmount="+rdAmount+" WHERE InvoiceID="+invNo.get();
+            con.execAction(qu);
+            refreshInvoice();
+            oldStockOut.clear();
+            oldAvail.clear();
+        }
+
+    }
+     
+class EditingCell extends TableCell<Sale, String> {
 
         private TextField textField;
 
@@ -623,8 +947,7 @@ public class posController implements Initializable{
                 if (isEditing()) {
                     if (textField != null) {
                         textField.setText(getString());
-//                        setGraphic(null);
-                    }
+                }
                     setText(null);
                     setGraphic(textField);
                 } else {
@@ -637,19 +960,9 @@ public class posController implements Initializable{
         private void createTextField() {
             textField = new TextField(getString());
             textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
-//            textField.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//                @Override
-//                public void handle(MouseEvent e) {
-//                    if(checkDuplicate(textField.getText())){
-//                    commitEdit(textField.getText());
-//                    errorMessage("Duplication Not Allowed");
-//                    }
-//                }
-//            });
             textField.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    
                     commitEdit(textField.getText());
 //                    if(checkDuplicate(textField.getText()))
 //                    errorMessage("Duplication Not Allowed");
@@ -657,7 +970,6 @@ public class posController implements Initializable{
             });
             
             textField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-                
                 if (!newValue) {
                     System.out.println("Commiting " + textField.getText());
                     
@@ -666,7 +978,6 @@ public class posController implements Initializable{
                 }
                 
                 else{
-                    //errorMessage("Duplication Not Allowed");
                     System.out.println(textField.getText()+"="+newValue);
                     System.out.println("CreatTextField Method");
                 }
@@ -678,5 +989,19 @@ public class posController implements Initializable{
             return getItem() == null ? "" : getItem();
         }
     }
-    
+    private boolean amountValidation() {
+        Pattern p=Pattern.compile("[0-9]+");
+        Matcher m=p.matcher(am.getText());
+        if(m.find() && m.group().equals(am.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Amount");
+            a1.setContentText("Please Enter Valid Amount");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+
 }

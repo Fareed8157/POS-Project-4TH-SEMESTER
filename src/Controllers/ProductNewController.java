@@ -24,22 +24,20 @@ import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -164,13 +162,14 @@ public class ProductNewController implements Initializable{
         
       //  boolean flag1;
         if(!isFieldEmpty()){
-            String bcode=barcode.getText();
-            String pname=name.getText();
-            String des=desc.getText();
-            String upr=uPrice.getText();
+            if(barcodeValidation() & nameValidation() & descValidation() & uPriceValidation() & stockInValidation()){
+               String bcode=barcode.getText().toLowerCase();
+            String pname=name.getText().toLowerCase();
+            String des=desc.getText().toLowerCase();
+            String upr=uPrice.getText().toLowerCase();
             String stkOut="";
-            String picF=picField.getText();
-            Integer cno=findId(category.getValue());
+            String picF=picField.getText().toLowerCase();
+            Integer cno=findId(category.getValue().toLowerCase());
             Category ctg=new Category(cno);
             String date=((JFXTextField)stkInDate.getEditor()).getText();
             Date today = new Date(date);
@@ -181,15 +180,14 @@ public class ProductNewController implements Initializable{
             catch (Exception e){
                 System.out.println("Error occurred" + e.getMessage());
             }
-            //String ctg=category.getValue().toString();
-            String sc=suppChose.getValue().toString();
-            String stkin=stockIn.getText();                     //product tracking data
-            String stkDate=stkInDate.getValue().toString();    //product tracking data
+            String sc=suppChose.getValue().toString().toLowerCase();
+            String stkin=stockIn.getText().toLowerCase();                     //product tracking data
+            String stkDate=stkInDate.getValue().toString().toLowerCase();    //product tracking data
             System.out.println("before  execute");
             if(!checkDuplicate(bcode)){
                 System.out.println("Inside if execute");
                 //String qu="INSERT INTO products VALUES(?,?,?,?,?,?,?,?)";
-                String qu="INSERT INTO products VALUES(?,?,?,?,?,?,"+"("+"Select CategoryID From category where CategoryName='"+category.getValue().toString()+"')"+",?)";
+                String qu="INSERT INTO products VALUES(?,?,?,?,?,?,"+"("+"Select CategoryID From category where CategoryName='"+category.getValue().toString()+"')"+",?,?)";
                 PreparedStatement pst=con.execQueryPrep(qu);
                 System.out.println("After prepared");
                 try {
@@ -202,6 +200,7 @@ public class ProductNewController implements Initializable{
                 pst.setBinaryStream(6, (InputStream)is, (int)file.length());
                 //pst.setString(7,ctg.getId().toString());
                 pst.setString(7,sc);
+                pst.setString(8,stkin);
                 Product pro=new Product(bcode,pname,des,upr,stkin,stkOut,im,ctg,sc);
                 
                 System.out.println("After execute only");
@@ -230,10 +229,9 @@ public class ProductNewController implements Initializable{
             else{
                errorMessage("Duplicate Bar code"); 
                 return false;
-            }
-               
-            
-        }
+                }   
+            }//end of inner if
+        }//end of outer if
             System.out.println("at the end of execute");
         return false;
     }
@@ -331,6 +329,90 @@ public class ProductNewController implements Initializable{
         desc.clear();
         picField.clear();
     }
-
+    private boolean barcodeValidation(){
+        Pattern p=Pattern.compile("[0-9]+");
+        Matcher m=p.matcher(barcode.getText());
+        if(m.find() && m.group().equals(barcode.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate BarCode");
+            a1.setContentText("Please Enter Valid BarCode");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean uPriceValidation(){
+        Pattern p=Pattern.compile("[0-9]+");
+        Matcher m=p.matcher(uPrice.getText());
+        if(m.find() && m.group().equals(uPrice.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Unit Price");
+            a1.setContentText("Please Enter Valid Unit Price");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean stockInValidation(){
+        Pattern p=Pattern.compile("[0-9]+");
+        Matcher m=p.matcher(stockIn.getText());
+        if(m.find() && m.group().equals(stockIn.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Stock In");
+            a1.setContentText("Please Enter Valid Stock In");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean nameValidation() {
+        Pattern p=Pattern.compile("^\\p{L}+[\\p{L}\\p{Z}\\p{P}]{0,}");
+        Matcher m=p.matcher(name.getText());
+        if(m.find() && m.group().equals(name.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Product Name");
+            a1.setContentText("Please Enter Valid Product Name");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean descValidation() {
+        Pattern p=Pattern.compile("^\\p{L}+[\\p{L}\\p{Z}\\p{P}]{0,}");
+        Matcher m=p.matcher(desc.getText());
+        //if(m.find() && m.group().equals(desc.getText()))
+        if(desc.getText().matches("([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z]+)"))
+        return true;  
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Product Description");
+            a1.setContentText("Please Enter Valid Product Description");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean picFieldValidation() {
+        Pattern p=Pattern.compile("([a-zA-Z]:)?(\\\\\\\\?[a-zA-Z0-9_.-]+)*\\\\?\\\\?");
+        Matcher m=p.matcher(picField.getText());
+        if(m.find() && m.group().equals(picField.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Image Path");
+            a1.setContentText("Please Enter Valid Image Path");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
     
 }

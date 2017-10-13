@@ -29,12 +29,6 @@ public class Product {
     private  SimpleObjectProperty<Category> ct;
     private  SimpleStringProperty supp;
     private  SimpleStringProperty imPath;
-    //private final SimpleObjectProperty<ProductTracking> pt;
-    //private final SimpleObjectProperty<Supplier> supp;
-    
-    //private  SimpleObjectProperty<Date> stockInDate;
-    
-
     public Product(String barCode, String name, String desc, String unitPrice,String stkIn, String stockOut,Image imv,Category ct, String supp) {
         this.barCode = new SimpleStringProperty(barCode);
         this.name =new SimpleStringProperty( name);
@@ -45,11 +39,7 @@ public class Product {
         this.imv =new SimpleObjectProperty(imv);
          this.ct =new SimpleObjectProperty(ct);
          this.supp =new SimpleStringProperty( supp);
-         
-        //this.selling =new SimpleStringProperty( selling);
-        //this.pt=new SimpleObjectProperty(pt);
-        //this.stockInDate=new SimpleObjectProperty(stockInDate);
-    }
+     }
     //bar code getter setter
     public String getBarCode(){
         return this.barCode.get();
@@ -153,50 +143,5 @@ public class Product {
     public SimpleStringProperty suppProperty(){
         return this.supp;
     }
-    
-    
-    
-    //selling getter and Setter
-//    
-//    public String getSelling(){
-//        return this.selling.get();
-//    }
-//    public void setSelling(String selling){
-//        this.selling.set(selling);
-//    }
-//    public StringProperty sellingProperty(){
-//        return this.selling;
-//    }
-//    
-    
-    //product Tracking getter and Setter
-    
-//    public ProductTracking getPt(){
-//        return this.pt.get();
-//    }
-//    public void setPt(ProductTracking pt){
-//        this.pt.set(pt);
-//    }
-//    public ObjectProperty<ProductTracking> ptProperty(){
-//        return this.pt;
-//    }
-    
-    //Supplier getter and setter
-    
-    
-    
-    
-    
-    //date setter and getter
-    
-//    public Date getStockInDate(){
-//        return this.stockInDate.get();
-//    }
-//    public void setStockInDate(Date imv){
-//        this.stockInDate.set(imv);
-//    }
-//    public ObjectProperty<Date> stockInDateProperty(){
-//        return this.stockInDate;
-//    }
     
 }

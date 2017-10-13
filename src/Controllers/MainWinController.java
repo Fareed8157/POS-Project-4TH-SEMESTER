@@ -6,26 +6,19 @@
 package Controllers;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXPopup;
-import com.jfoenix.controls.JFXRippler;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 
 /**
@@ -51,7 +44,7 @@ public class MainWinController implements Initializable{
 
     
     @FXML
-    private JFXButton settings;
+    private JFXButton inventory;
 
     @FXML
     private FontAwesomeIconView close;
@@ -95,6 +88,11 @@ public class MainWinController implements Initializable{
             sc=new Scene(root);
             win.setScene(sc);
             win.show();
+        }else if(event.getSource()==inventory){
+          String qu="";
+          HashMap<String,Object> hm=new HashMap<>();
+          PrintReport pr=new PrintReport(qu,hm);
+          pr.showReport();
         }
         win.setResizable(false);
     }
@@ -102,11 +100,5 @@ public class MainWinController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         
         
-    }
-
-    
-    
-
-    
-    
+    }    
 }

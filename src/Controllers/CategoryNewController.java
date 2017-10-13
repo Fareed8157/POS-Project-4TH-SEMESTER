@@ -33,11 +33,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import MainPack.Category;
 import com.jfoenix.validation.RequiredFieldValidator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.control.Control;
-import javax.xml.bind.Validator;
-import org.controlsfx.validation.ValidationResult;
-import org.controlsfx.validation.ValidationSupport;
 
 /**
  *
@@ -125,13 +123,6 @@ public class CategoryNewController implements Initializable{
        nImage.validate();
     }
 });
-//        nImage.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-//                if (!newValue) 
-//                    nImage.validate();
-//                else
-//                    
-//        });
-
         chooseFile=new FileChooser();
         chooseFile.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files","*.jpg","*.png","*.gif"));
         dbCon=Configs.getInstance();
@@ -140,10 +131,10 @@ public class CategoryNewController implements Initializable{
     
     private void errorMessage(String message){
         Alert a1= new Alert(Alert.AlertType.ERROR);
-            a1.setTitle("Error");
-            a1.setContentText(message);
-            a1.setHeaderText(null);
-            a1.showAndWait();
+        a1.setTitle("Error");
+        a1.setContentText(message);
+        a1.setHeaderText(null);
+        a1.showAndWait();
     }
     private void infoMessage(String message){
         Alert a1= new Alert(Alert.AlertType.INFORMATION);
@@ -154,13 +145,15 @@ public class CategoryNewController implements Initializable{
 
     private boolean addNewCategory() {
         String id=nid.getText();
-        String name=nName.getText();
-        String desc=nDesc.getText();
+        String name=nName.getText().toLowerCase();
+        String desc=nDesc.getText().toLowerCase();
         String image=nImage.getText();
         
         if(id.isEmpty() || name.isEmpty() || desc.isEmpty() || image.isEmpty())
             errorMessage("Please Complete All the Fields");
-        try {
+        else{
+            if(nIdValidation() & nNameValidation() & nDescValidation() ){
+               try {
             is=new FileInputStream(file);
         } catch (FileNotFoundException ex) {
             System.out.println(ex.toString());
@@ -196,7 +189,11 @@ public class CategoryNewController implements Initializable{
         }
         else{
             errorMessage("Duplicate Values");
-        }
+        }     
+        }//end of inner if
+        
+      }
+        
         
         
         return false;
@@ -236,5 +233,60 @@ public class CategoryNewController implements Initializable{
         }
     }
 
-    
+    private boolean nIdValidation(){
+        Pattern p=Pattern.compile("[0-9]+");
+        Matcher m=p.matcher(nid.getText());
+        if(m.find() && m.group().equals(nid.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate ID");
+            a1.setContentText("Please Enter Valid ID");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean nNameValidation() {
+        Pattern p=Pattern.compile("^\\p{L}+[\\p{L}\\p{Z}\\p{P}]{0,}");
+        Matcher m=p.matcher(nName.getText());
+        if(m.find() && m.group().equals(nName.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Category Name");
+            a1.setContentText("Please Enter Valid Category Name");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean nDescValidation() {
+        Pattern p=Pattern.compile("([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z]+)");
+        Matcher m=p.matcher(nDesc.getText());
+        if(nDesc.getText().matches("([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z]+)"))
+        return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Description");
+            a1.setContentText("Please Enter Valid Description");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
+    private boolean nImageValidation() {
+        Pattern p=Pattern.compile("([a-zA-Z]:)?(\\\\\\\\?[a-zA-Z0-9_.-]+)*\\\\?\\\\?");
+        Matcher m=p.matcher(nImage.getText());
+        if(m.find() && m.group().equals(nImage.getText()))
+            return true;
+        else{
+            Alert a1= new Alert(Alert.AlertType.WARNING);
+            a1.setTitle("Validate Image Pathe");
+            a1.setContentText("Please Enter Valid Image Path");
+            a1.setHeaderText(null);
+            a1.showAndWait();
+            return false;
+        }
+    }
 }

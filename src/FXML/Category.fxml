@@ -13,7 +13,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="612.0" prefWidth="868.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.CategoryController">
    <children>
-      <TableView fx:id="catTable" layoutY="123.0" prefHeight="489.0" prefWidth="879.0" style="-fx-background-color: #F5F5F5;">
+      <TableView fx:id="catTable" layoutY="123.0" prefHeight="489.0" prefWidth="879.0" style="-fx-background-color: #F5F5F5;" stylesheets="@tableCss.css">
         <columns>
             <TableColumn fx:id="sno" prefWidth="75.0" text="S.No" />
           <TableColumn fx:id="cId" prefWidth="126.0" text="Category ID" />
@@ -24,17 +24,17 @@
       </TableView>
       <AnchorPane prefHeight="117.0" prefWidth="879.0" style="-fx-background-color: #29B6F6;">
          <children>
-            <JFXButton fx:id="newItem" buttonType="RAISED" layoutX="14.0" layoutY="31.0" onAction="#onAction" prefHeight="65.0" prefWidth="93.0" style="-fx-background-color: #B3E5FC;" text="New" textFill="#757575">
+            <JFXButton fx:id="newItem" buttonType="RAISED" layoutX="14.0" layoutY="31.0" onAction="#onAction" prefHeight="65.0" prefWidth="93.0" stylesheets="@posCss.css" text="New" textFill="#757575">
                <font>
                   <Font size="17.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="updateItem" buttonType="RAISED" layoutX="137.0" layoutY="31.0" onAction="#onAction" prefHeight="65.0" prefWidth="93.0" style="-fx-background-color: #B3E5FC;" text="Update" textFill="#757575">
+            <JFXButton fx:id="updateItem" buttonType="RAISED" layoutX="137.0" layoutY="31.0" onAction="#onAction" prefHeight="65.0" prefWidth="93.0" stylesheets="@posCss.css" text="Update" textFill="#757575">
                <font>
                   <Font size="17.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="deleteItem" buttonType="RAISED" layoutX="260.0" layoutY="31.0" onAction="#onAction" prefHeight="65.0" prefWidth="93.0" style="-fx-background-color: #B3E5FC;" text="Delete" textFill="#757575">
+            <JFXButton fx:id="deleteItem" buttonType="RAISED" layoutX="260.0" layoutY="31.0" onAction="#onAction" prefHeight="65.0" prefWidth="93.0" stylesheets="@posCss.css" text="Delete" textFill="#757575">
                <font>
                   <Font size="17.0" />
                </font>
@@ -59,12 +59,12 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <JFXButton fx:id="closeButton" buttonType="RAISED" layoutX="381.0" layoutY="31.0" onAction="#onAction" prefHeight="65.0" prefWidth="93.0" style="-fx-background-color: #B3E5FC;" text="Close" textFill="#757575">
+            <JFXButton fx:id="closeButton" buttonType="RAISED" layoutX="381.0" layoutY="31.0" onAction="#onAction" prefHeight="65.0" prefWidth="93.0" stylesheets="@posCss.css" text="Close" textFill="#757575">
                <font>
                   <Font size="17.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="refresh" buttonType="RAISED" layoutX="503.0" layoutY="31.0" onAction="#onAction" prefHeight="65.0" prefWidth="93.0" style="-fx-background-color: #B3E5FC;" text="Refresh" textFill="#757575">
+            <JFXButton fx:id="refresh" buttonType="RAISED" layoutX="503.0" layoutY="31.0" onAction="#onAction" prefHeight="65.0" prefWidth="93.0" stylesheets="@posCss.css" text="Refresh" textFill="#757575">
                <font>
                   <Font size="17.0" />
                </font>
